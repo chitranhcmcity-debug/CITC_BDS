@@ -1,6 +1,6 @@
 <?php
 /**
- * LegalRepository – Truy vấn CSDL cho bảng `legal_types` (Pháp lý).
+ * LegalRepository – Truy vấn CSDL cho bảng `loai_phap_ly` (Pháp lý).
  * Tuân thủ SOLID, Repository Pattern.
  */
 class LegalRepository
@@ -14,7 +14,7 @@ class LegalRepository
 
     public function getAll(string $search = ''): array
     {
-        $sql = "SELECT * FROM legal_types";
+        $sql = "SELECT * FROM loai_phap_ly";
         if (!empty($search)) {
             $sql .= " WHERE name LIKE :search OR code LIKE :search";
         }
@@ -29,7 +29,7 @@ class LegalRepository
 
     public function findById(int $id): ?object
     {
-        $this->db->query("SELECT * FROM legal_types WHERE id = :id LIMIT 1");
+        $this->db->query("SELECT * FROM loai_phap_ly WHERE id = :id LIMIT 1");
         $this->db->bind(':id', $id, PDO::PARAM_INT);
         $res = $this->db->single();
         return $res ? $res : null;
@@ -38,7 +38,7 @@ class LegalRepository
     public function create(array $data): int
     {
         $this->db->query("
-            INSERT INTO legal_types (name, code, sort_order, status) 
+            INSERT INTO loai_phap_ly (name, code, sort_order, status) 
             VALUES (:name, :code, :sort_order, :status)
         ");
         $this->db->bind(':name',       $data['name']);
@@ -56,7 +56,7 @@ class LegalRepository
     public function update(int $id, array $data): bool
     {
         $this->db->query("
-            UPDATE legal_types 
+            UPDATE loai_phap_ly 
             SET name = :name, code = :code, sort_order = :sort_order, status = :status
             WHERE id = :id
         ");
@@ -71,14 +71,14 @@ class LegalRepository
 
     public function delete(int $id): bool
     {
-        $this->db->query("DELETE FROM legal_types WHERE id = :id");
+        $this->db->query("DELETE FROM loai_phap_ly WHERE id = :id");
         $this->db->bind(':id', $id, PDO::PARAM_INT);
         return $this->db->execute();
     }
 
     public function changeStatus(int $id, string $status): bool
     {
-        $this->db->query("UPDATE legal_types SET status = :status WHERE id = :id");
+        $this->db->query("UPDATE loai_phap_ly SET status = :status WHERE id = :id");
         $this->db->bind(':status', $status);
         $this->db->bind(':id', $id, PDO::PARAM_INT);
         return $this->db->execute();
@@ -86,7 +86,7 @@ class LegalRepository
 
     public function updateSortOrder(int $id, int $sortOrder): bool
     {
-        $this->db->query("UPDATE legal_types SET sort_order = :sort_order WHERE id = :id");
+        $this->db->query("UPDATE loai_phap_ly SET sort_order = :sort_order WHERE id = :id");
         $this->db->bind(':sort_order', $sortOrder, PDO::PARAM_INT);
         $this->db->bind(':id', $id, PDO::PARAM_INT);
         return $this->db->execute();

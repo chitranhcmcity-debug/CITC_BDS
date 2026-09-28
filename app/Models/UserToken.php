@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserToken extends Model
 {
-    protected $table = 'user_tokens';
+    protected $table = 'ma_truy_cap_nguoi_dung';
 
     const CREATED_AT = 'created_at';
 

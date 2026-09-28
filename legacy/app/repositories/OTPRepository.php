@@ -1,6 +1,6 @@
 <?php
 /**
- * OTPRepository – Quản lý mã OTP 6 chữ số trong bảng otp_codes.
+ * OTPRepository – Quản lý mã OTP 6 chữ số trong bảng ma_otp.
  */
 class OTPRepository
 {
@@ -27,7 +27,7 @@ class OTPRepository
         $expiresAt = date('Y-m-d H:i:s', strtotime("+{$ttlMin} minutes"));
 
         $this->db->query(
-            "INSERT INTO otp_codes (user_id, otp_code, purpose, expires_at, attempts)
+            "INSERT INTO ma_otp (user_id, otp_code, purpose, expires_at, attempts)
              VALUES (:uid, :otp, :purpose, :exp, 0)"
         );
         $this->db->bind(':uid',     $userId);
@@ -46,7 +46,7 @@ class OTPRepository
     public function verify(int $userId, string $code, string $purpose): bool
     {
         $this->db->query(
-            "SELECT * FROM otp_codes
+            "SELECT * FROM ma_otp
              WHERE user_id  = :uid
                AND purpose  = :purpose
                AND used_at  IS NULL
@@ -63,14 +63,14 @@ class OTPRepository
 
         // Chặn brute-force: mỗi mã OTP chỉ được thử tối đa 5 lần.
         if ((int)$row->attempts >= 5) {
-            $this->db->query("UPDATE otp_codes SET used_at = NOW() WHERE id = :id");
+            $this->db->query("UPDATE ma_otp SET used_at = NOW() WHERE id = :id");
             $this->db->bind(':id', $row->id);
             $this->db->execute();
             return false;
         }
 
         // Tăng số lần thử.
-        $this->db->query("UPDATE otp_codes SET attempts = attempts + 1 WHERE id = :id");
+        $this->db->query("UPDATE ma_otp SET attempts = attempts + 1 WHERE id = :id");
         $this->db->bind(':id', $row->id);
         $this->db->execute();
 
@@ -78,7 +78,7 @@ class OTPRepository
         if (!hash_equals((string)$row->otp_code, hash('sha256', $code))) return false;
 
         // Đánh dấu đã dùng
-        $this->db->query("UPDATE otp_codes SET used_at = NOW() WHERE id = :id");
+        $this->db->query("UPDATE ma_otp SET used_at = NOW() WHERE id = :id");
         $this->db->bind(':id', $row->id);
         $this->db->execute();
 
@@ -91,7 +91,7 @@ class OTPRepository
     public function canResend(int $userId, string $purpose, int $cooldownSec = 60): bool
     {
         $this->db->query(
-            "SELECT created_at FROM otp_codes
+            "SELECT created_at FROM ma_otp
              WHERE user_id = :uid AND purpose = :purpose
              ORDER BY created_at DESC LIMIT 1"
         );
@@ -110,7 +110,7 @@ class OTPRepository
     public function resendCooldownLeft(int $userId, string $purpose, int $cooldownSec = 60): int
     {
         $this->db->query(
-            "SELECT created_at FROM otp_codes
+            "SELECT created_at FROM ma_otp
              WHERE user_id = :uid AND purpose = :purpose
              ORDER BY created_at DESC LIMIT 1"
         );
@@ -129,7 +129,7 @@ class OTPRepository
     public function invalidatePending(int $userId, string $purpose): bool
     {
         $this->db->query(
-            "DELETE FROM otp_codes
+            "DELETE FROM ma_otp
              WHERE user_id = :uid AND purpose = :purpose AND used_at IS NULL"
         );
         $this->db->bind(':uid',     $userId);
@@ -142,7 +142,7 @@ class OTPRepository
      */
     public function deleteExpired(): int
     {
-        $this->db->query("DELETE FROM otp_codes WHERE expires_at < NOW()");
+        $this->db->query("DELETE FROM ma_otp WHERE expires_at < NOW()");
         $this->db->execute();
         return $this->db->rowCount();
     }
@@ -152,7 +152,7 @@ class OTPRepository
     {
         $this->db->query(
             "SELECT id, user_id, purpose, expires_at, used_at, attempts, created_at
-             FROM otp_codes
+             FROM ma_otp
              WHERE user_id = :uid
              ORDER BY created_at DESC
              LIMIT :lim"

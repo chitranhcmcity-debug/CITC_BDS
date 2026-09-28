@@ -6,7 +6,7 @@ use App\Models\Database;
 use PDO;
 
 /**
- * WardRepository – Truy vấn CSDL cho bảng `wards`.
+ * WardRepository – Truy vấn CSDL cho bảng `phuong_xa`.
  * Tuân thủ SOLID, Repository Pattern.
  */
 class WardRepository
@@ -21,9 +21,9 @@ class WardRepository
     public function getAll(string $search = ''): array
     {
         $sql = 'SELECT w.*, d.name as district_name, p.name as province_name 
-                FROM wards w 
-                JOIN districts d ON w.district_code = d.code
-                JOIN provinces p ON d.province_code = p.code';
+                FROM phuong_xa w 
+                JOIN quan_huyen d ON w.district_code = d.code
+                JOIN tinh_thanh p ON d.province_code = p.code';
         if (! empty($search)) {
             $sql .= ' WHERE w.name LIKE :search OR w.code LIKE :search OR d.name LIKE :search OR p.name LIKE :search';
         }
@@ -39,7 +39,7 @@ class WardRepository
 
     public function findById(int $id): ?object
     {
-        $this->db->query('SELECT * FROM wards WHERE id = :id LIMIT 1');
+        $this->db->query('SELECT * FROM phuong_xa WHERE id = :id LIMIT 1');
         $this->db->bind(':id', $id, PDO::PARAM_INT);
         $res = $this->db->single();
 
@@ -48,7 +48,7 @@ class WardRepository
 
     public function findByCode(string $code): ?object
     {
-        $this->db->query('SELECT * FROM wards WHERE code = :code LIMIT 1');
+        $this->db->query('SELECT * FROM phuong_xa WHERE code = :code LIMIT 1');
         $this->db->bind(':code', $code);
         $res = $this->db->single();
 
@@ -57,7 +57,7 @@ class WardRepository
 
     public function getByDistrict(string $districtCode): array
     {
-        $this->db->query("SELECT * FROM wards WHERE district_code = :dist AND status = 'active' ORDER BY sort_order ASC, name ASC");
+        $this->db->query("SELECT * FROM phuong_xa WHERE district_code = :dist AND status = 'active' ORDER BY sort_order ASC, name ASC");
         $this->db->bind(':dist', $districtCode);
 
         return $this->db->resultSet() ?: [];
@@ -66,7 +66,7 @@ class WardRepository
     public function create(array $data): int
     {
         $this->db->query('
-            INSERT INTO wards (code, district_code, name, type, sort_order, status) 
+            INSERT INTO phuong_xa (code, district_code, name, type, sort_order, status) 
             VALUES (:code, :district_code, :name, :type, :sort_order, :status)
         ');
         $this->db->bind(':code', $data['code']);
@@ -88,7 +88,7 @@ class WardRepository
     public function update(int $id, array $data): bool
     {
         $this->db->query('
-            UPDATE wards 
+            UPDATE phuong_xa 
             SET code = :code, district_code = :district_code, name = :name, type = :type, 
                 sort_order = :sort_order, status = :status
             WHERE id = :id
@@ -106,7 +106,7 @@ class WardRepository
 
     public function delete(int $id): bool
     {
-        $this->db->query('DELETE FROM wards WHERE id = :id');
+        $this->db->query('DELETE FROM phuong_xa WHERE id = :id');
         $this->db->bind(':id', $id, PDO::PARAM_INT);
 
         return $this->db->execute();

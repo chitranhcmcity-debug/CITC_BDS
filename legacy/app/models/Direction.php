@@ -1,11 +1,11 @@
 <?php
 /**
- * Model Direction – Ánh xạ tới hướng nhà `directions`.
+ * Model Direction – Ánh xạ tới hướng nhà `huong_nha`.
  * Tuân thủ SOLID, Model Layer.
  */
 class Direction extends Model
 {
-    protected string $table = 'directions';
+    protected string $table = 'huong_nha';
 
     public int $id = 0;
     public string $name = '';

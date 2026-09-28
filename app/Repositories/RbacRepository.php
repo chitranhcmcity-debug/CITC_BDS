@@ -16,7 +16,7 @@ class RbacRepository
 
     public function roles(): array
     {
-        $this->db->query('SELECT r.*,(SELECT COUNT(*) FROM nguoi_dung u WHERE u.ma_vai_tro=r.id) user_count,(SELECT COUNT(*) FROM role_permissions rp WHERE rp.role_id=r.id) permission_count FROM vai_tro r ORDER BY r.id');
+        $this->db->query('SELECT r.*,(SELECT COUNT(*) FROM nguoi_dung u WHERE u.ma_vai_tro=r.id) user_count,(SELECT COUNT(*) FROM vai_tro_quyen_han rp WHERE rp.role_id=r.id) permission_count FROM vai_tro r ORDER BY r.id');
 
         return $this->db->resultSet();
     }
@@ -31,14 +31,14 @@ class RbacRepository
 
     public function permissions(): array
     {
-        $this->db->query('SELECT * FROM permissions ORDER BY module,action');
+        $this->db->query('SELECT * FROM quyen_han ORDER BY module,action');
 
         return $this->db->resultSet();
     }
 
     public function permissionIds(int $role): array
     {
-        $this->db->query('SELECT permission_id FROM role_permissions WHERE role_id=:r');
+        $this->db->query('SELECT permission_id FROM vai_tro_quyen_han WHERE role_id=:r');
         $this->db->bind(':r', $role, PDO::PARAM_INT);
 
         return array_map('intval', array_column(array_map(fn ($x) => (array) $x, $this->db->resultSet()), 'permission_id'));
@@ -48,7 +48,7 @@ class RbacRepository
     {
         if ($role === 1) {
             return true;
-        }$this->db->query('SELECT 1 FROM role_permissions rp JOIN permissions p ON p.id=rp.permission_id WHERE rp.role_id=:r AND p.code=:c LIMIT 1');
+        }$this->db->query('SELECT 1 FROM vai_tro_quyen_han rp JOIN quyen_han p ON p.id=rp.permission_id WHERE rp.role_id=:r AND p.code=:c LIMIT 1');
         $this->db->bind(':r', $role, PDO::PARAM_INT);
         $this->db->bind(':c', $code);
 
@@ -86,12 +86,12 @@ class RbacRepository
 
     public function syncPermissions(int $role, array $ids): bool
     {
-        $this->db->query('DELETE FROM role_permissions WHERE role_id=:r');
+        $this->db->query('DELETE FROM vai_tro_quyen_han WHERE role_id=:r');
         $this->db->bind(':r', $role, PDO::PARAM_INT);
         if (! $this->db->execute()) {
             return false;
         }foreach ($ids as $id) {
-            $this->db->query('INSERT IGNORE INTO role_permissions(role_id,permission_id) VALUES(:r,:p)');
+            $this->db->query('INSERT IGNORE INTO vai_tro_quyen_han(role_id,permission_id) VALUES(:r,:p)');
             $this->db->bind(':r', $role, PDO::PARAM_INT);
             $this->db->bind(':p', $id, PDO::PARAM_INT);
             if (! $this->db->execute()) {
@@ -109,10 +109,10 @@ class RbacRepository
         $this->db->bind(':u', $user, PDO::PARAM_INT);
         if (! $this->db->execute() || $this->db->rowCount() < 1) {
             return false;
-        }$this->db->query('DELETE FROM user_roles WHERE user_id=:u');
+        }$this->db->query('DELETE FROM vai_tro_nguoi_dung WHERE user_id=:u');
         $this->db->bind(':u', $user, PDO::PARAM_INT);
         $this->db->execute();
-        $this->db->query('INSERT INTO user_roles(user_id,role_id) VALUES(:u,:r)');
+        $this->db->query('INSERT INTO vai_tro_nguoi_dung(user_id,role_id) VALUES(:u,:r)');
         $this->db->bind(':u', $user, PDO::PARAM_INT);
         $this->db->bind(':r', $role, PDO::PARAM_INT);
 

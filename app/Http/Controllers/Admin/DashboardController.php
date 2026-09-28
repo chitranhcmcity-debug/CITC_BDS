@@ -73,7 +73,7 @@ class DashboardController extends Controller
                    SUM(CASE WHEN type = 'view' THEN 1 ELSE 0 END) as total_views,
                    SUM(CASE WHEN type = 'chat' THEN 1 ELSE 0 END) as total_chats,
                    SUM(CASE WHEN type = 'call' THEN 1 ELSE 0 END) as total_calls
-            FROM post_analytics
+            FROM thong_ke_bai_dang
             WHERE created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
             GROUP BY DATE_FORMAT(created_at, '%m/%Y'), DATE_FORMAT(created_at, '%Y-%m')
             ORDER BY DATE_FORMAT(created_at, '%Y-%m') ASC

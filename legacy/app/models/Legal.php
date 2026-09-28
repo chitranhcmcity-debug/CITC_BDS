@@ -1,11 +1,11 @@
 <?php
 /**
- * Model Legal – Ánh xạ tới pháp lý bất động sản `legal_types`.
+ * Model Legal – Ánh xạ tới pháp lý bất động sản `loai_phap_ly`.
  * Tuân thủ SOLID, Model Layer.
  */
 class Legal extends Model
 {
-    protected string $table = 'legal_types';
+    protected string $table = 'loai_phap_ly';
 
     public int $id = 0;
     public string $name = '';

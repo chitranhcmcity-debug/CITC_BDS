@@ -1,11 +1,11 @@
 <?php
 /**
- * Model Category – Ánh xạ tới danh mục tin đăng trong bảng `categories`.
+ * Model Category – Ánh xạ tới danh mục tin đăng trong bảng `nhom_danh_muc`.
  * Tuân thủ SOLID, Model Layer.
  */
 class Category extends Model
 {
-    protected string $table = 'categories';
+    protected string $table = 'nhom_danh_muc';
 
     public int $id = 0;
     public string $name = '';

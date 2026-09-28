@@ -203,12 +203,12 @@ class AdminTinTucController extends Controller
             $db = new Database();
 
             // Xóa bình luận liên kết
-            $db->query("DELETE FROM news_comments WHERE bai_viet_id = :id");
+            $db->query("DELETE FROM binh_luan_tin_tuc WHERE bai_viet_id = :id");
             $db->bind(':id', $id);
             $db->execute();
 
             // Xóa lượt thích liên kết
-            $db->query("DELETE FROM news_likes WHERE bai_viet_id = :id");
+            $db->query("DELETE FROM luot_thich_tin_tuc WHERE bai_viet_id = :id");
             $db->bind(':id', $id);
             $db->execute();
 

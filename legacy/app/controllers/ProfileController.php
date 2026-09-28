@@ -423,15 +423,15 @@ class ProfileController extends Controller
         $hashedToken = hash('sha256', $rawToken);
         $expires = date('Y-m-d H:i:s', strtotime('+24 hours'));
 
-        // Lưu vào bảng user_tokens
+        // Lưu vào bảng ma_truy_cap_nguoi_dung
         $db = new Database;
         // Vô hiệu hóa các token xác thực email cũ
-        $db->query("UPDATE user_tokens SET expires_at = NOW() WHERE user_id = :uid AND type = 'email_verify' AND used_at IS NULL");
+        $db->query("UPDATE ma_truy_cap_nguoi_dung SET expires_at = NOW() WHERE user_id = :uid AND type = 'email_verify' AND used_at IS NULL");
         $db->bind(':uid', $userId);
         $db->execute();
 
         $db->query("
-            INSERT INTO user_tokens (user_id, token, type, expires_at, created_at)
+            INSERT INTO ma_truy_cap_nguoi_dung (user_id, token, type, expires_at, created_at)
             VALUES (:uid, :token, 'email_verify', :expires, NOW())
         ");
         $db->bind(':uid', $userId);

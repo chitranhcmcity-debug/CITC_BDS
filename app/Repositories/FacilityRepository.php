@@ -6,7 +6,7 @@ use App\Models\Database;
 use PDO;
 
 /**
- * FacilityRepository – Truy vấn CSDL cho bảng `facilities`.
+ * FacilityRepository – Truy vấn CSDL cho bảng `tien_ich`.
  * Tuân thủ SOLID, Repository Pattern.
  */
 class FacilityRepository
@@ -20,7 +20,7 @@ class FacilityRepository
 
     public function getAll(string $search = ''): array
     {
-        $sql = 'SELECT * FROM facilities';
+        $sql = 'SELECT * FROM tien_ich';
         if (! empty($search)) {
             $sql .= ' WHERE name LIKE :search OR slug LIKE :search';
         }
@@ -36,7 +36,7 @@ class FacilityRepository
 
     public function findById(int $id): ?object
     {
-        $this->db->query('SELECT * FROM facilities WHERE id = :id LIMIT 1');
+        $this->db->query('SELECT * FROM tien_ich WHERE id = :id LIMIT 1');
         $this->db->bind(':id', $id, PDO::PARAM_INT);
         $res = $this->db->single();
 
@@ -45,7 +45,7 @@ class FacilityRepository
 
     public function findBySlug(string $slug): ?object
     {
-        $this->db->query('SELECT * FROM facilities WHERE slug = :slug LIMIT 1');
+        $this->db->query('SELECT * FROM tien_ich WHERE slug = :slug LIMIT 1');
         $this->db->bind(':slug', $slug);
         $res = $this->db->single();
 
@@ -55,7 +55,7 @@ class FacilityRepository
     public function create(array $data): int
     {
         $this->db->query('
-            INSERT INTO facilities (name, slug, icon, sort_order, status) 
+            INSERT INTO tien_ich (name, slug, icon, sort_order, status) 
             VALUES (:name, :slug, :icon, :sort_order, :status)
         ');
         $this->db->bind(':name', $data['name']);
@@ -76,7 +76,7 @@ class FacilityRepository
     public function update(int $id, array $data): bool
     {
         $this->db->query('
-            UPDATE facilities 
+            UPDATE tien_ich 
             SET name = :name, slug = :slug, icon = :icon, sort_order = :sort_order, status = :status
             WHERE id = :id
         ');
@@ -92,7 +92,7 @@ class FacilityRepository
 
     public function delete(int $id): bool
     {
-        $this->db->query('DELETE FROM facilities WHERE id = :id');
+        $this->db->query('DELETE FROM tien_ich WHERE id = :id');
         $this->db->bind(':id', $id, PDO::PARAM_INT);
 
         return $this->db->execute();
@@ -100,7 +100,7 @@ class FacilityRepository
 
     public function changeStatus(int $id, string $status): bool
     {
-        $this->db->query('UPDATE facilities SET status = :status WHERE id = :id');
+        $this->db->query('UPDATE tien_ich SET status = :status WHERE id = :id');
         $this->db->bind(':status', $status);
         $this->db->bind(':id', $id, PDO::PARAM_INT);
 
@@ -109,7 +109,7 @@ class FacilityRepository
 
     public function updateSortOrder(int $id, int $sortOrder): bool
     {
-        $this->db->query('UPDATE facilities SET sort_order = :sort_order WHERE id = :id');
+        $this->db->query('UPDATE tien_ich SET sort_order = :sort_order WHERE id = :id');
         $this->db->bind(':sort_order', $sortOrder, PDO::PARAM_INT);
         $this->db->bind(':id', $id, PDO::PARAM_INT);
 

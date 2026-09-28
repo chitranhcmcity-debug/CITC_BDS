@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Database;
 
 /**
- * LogService – Lưu trữ nhật ký hành động chỉnh sửa danh mục của Admin vào bảng `system_logs`.
+ * LogService – Lưu trữ nhật ký hành động chỉnh sửa danh mục của Admin vào bảng `nhat_ky_he_thong`.
  * Tuân thủ SOLID, Service Pattern.
  */
 class LogService
@@ -28,7 +28,7 @@ class LogService
         }
 
         $db->query('
-            INSERT INTO system_logs (user_id, action, model_type, model_id, description, ip_address) 
+            INSERT INTO nhat_ky_he_thong (user_id, action, model_type, model_id, description, ip_address) 
             VALUES (:uid, :act, :mtype, :mid, :desc, :ip)
         ');
         $db->bind(':uid', $adminId, PDO::PARAM_INT);
@@ -49,7 +49,7 @@ class LogService
         $db = new Database;
         $db->query('
             SELECT l.*, u.ten as admin_name 
-            FROM system_logs l
+            FROM nhat_ky_he_thong l
             LEFT JOIN nguoi_dung u ON l.user_id = u.id
             ORDER BY l.created_at DESC 
             LIMIT :limit OFFSET :offset

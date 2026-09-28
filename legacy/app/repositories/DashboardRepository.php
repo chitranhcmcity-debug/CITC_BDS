@@ -40,7 +40,7 @@ class DashboardRepository
               SUM(type='view') AS views, SUM(type='call') AS calls,
               SUM(type='chat') AS chats, SUM(type='save') AS saves,
               SUM(type='share') AS shares
-            FROM post_analytics GROUP BY post_id
+            FROM thong_ke_bai_dang GROUP BY post_id
           ) a ON a.post_id=p.id
           WHERE p.ma_nguoi_dung=:uid");
         $this->db->bind(':uid', $userId, PDO::PARAM_INT);
@@ -102,7 +102,7 @@ class DashboardRepository
             SUM(a.type='view') AS views, SUM(a.type='call') AS calls,
             SUM(a.type='chat') AS chats, SUM(a.type='save') AS saves,
             SUM(a.type='share') AS shares
-          FROM post_analytics a JOIN du_an p ON p.id=a.post_id
+          FROM thong_ke_bai_dang a JOIN du_an p ON p.id=a.post_id
           WHERE p.ma_nguoi_dung=:uid
             AND a.created_at>=DATE_SUB(CURDATE(), INTERVAL " . ($days - 1) . " DAY)
           GROUP BY DATE(a.created_at) ORDER BY day");

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AdminLog extends Model
 {
-    protected $table = 'admin_logs';
+    protected $table = 'nhat_ky_quan_tri';
 
     const CREATED_AT = 'created_at';
 

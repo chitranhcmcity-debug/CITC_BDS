@@ -101,7 +101,7 @@ class AdminDanhMucController extends Controller
             $desc = trim($_POST['description'] ?? '');
 
             // Kiểm tra trùng slug
-            $db->query("SELECT id FROM categories WHERE slug = :slug");
+            $db->query("SELECT id FROM nhom_danh_muc WHERE slug = :slug");
             $db->bind(':slug', $slug);
             if ($db->single()) {
                 Session::flash('admin_msg', 'Tên danh mục hoặc slug đã tồn tại.', 'alert alert-danger');
@@ -123,7 +123,7 @@ class AdminDanhMucController extends Controller
             $code = trim($_POST['code'] ?? '');
             $desc = trim($_POST['description'] ?? '');
 
-            $db->query("SELECT id FROM transaction_types WHERE slug = :slug");
+            $db->query("SELECT id FROM loai_giao_dich WHERE slug = :slug");
             $db->bind(':slug', $slug);
             if ($db->single()) {
                 Session::flash('admin_msg', 'Tên loại giao dịch đã tồn tại.', 'alert alert-danger');
@@ -145,7 +145,7 @@ class AdminDanhMucController extends Controller
         } elseif ($type === 'facilities') {
             $icon = trim($_POST['icon'] ?? '');
 
-            $db->query("SELECT id FROM facilities WHERE slug = :slug");
+            $db->query("SELECT id FROM tien_ich WHERE slug = :slug");
             $db->bind(':slug', $slug);
             if ($db->single()) {
                 Session::flash('admin_msg', 'Tên tiện ích đã tồn tại.', 'alert alert-danger');
@@ -165,7 +165,7 @@ class AdminDanhMucController extends Controller
         } elseif ($type === 'directions') {
             $code = trim($_POST['code'] ?? $slug);
 
-            $db->query("SELECT id FROM directions WHERE code = :code");
+            $db->query("SELECT id FROM huong_nha WHERE code = :code");
             $db->bind(':code', $code);
             if ($db->single()) {
                 Session::flash('admin_msg', 'Mã hướng nhà đã tồn tại.', 'alert alert-danger');
@@ -183,7 +183,7 @@ class AdminDanhMucController extends Controller
         } elseif ($type === 'legal_types') {
             $code = trim($_POST['code'] ?? $slug);
 
-            $db->query("SELECT id FROM legal_types WHERE code = :code");
+            $db->query("SELECT id FROM loai_phap_ly WHERE code = :code");
             $db->bind(':code', $code);
             if ($db->single()) {
                 Session::flash('admin_msg', 'Mã pháp lý đã tồn tại.', 'alert alert-danger');
@@ -351,7 +351,7 @@ class AdminDanhMucController extends Controller
             $success = $this->catSvc->deleteCategory($id, $adminId);
         } elseif ($type === 'transaction_types') {
             // Kiểm tra liên kết: loại giao dịch đang được sử dụng trong tin đăng
-            $db->query("SELECT COUNT(*) as total FROM du_an WHERE loai_bat_dong_san IN (SELECT name FROM transaction_types WHERE id = :id)");
+            $db->query("SELECT COUNT(*) as total FROM du_an WHERE loai_bat_dong_san IN (SELECT name FROM loai_giao_dich WHERE id = :id)");
             $db->bind(':id', $id);
             if ((int)$db->single()->total > 0) {
                 Session::flash('admin_msg', 'Không thể xóa: Loại giao dịch đang được sử dụng trong tin đăng.', 'alert alert-danger');
@@ -367,7 +367,7 @@ class AdminDanhMucController extends Controller
             if ($success) LogService::write($adminId, 'delete', 'facilities', $id, "Xóa tiện ích ID #{$id}");
         } elseif ($type === 'directions') {
             // Kiểm tra liên kết: hướng nhà đang được sử dụng trong tin đăng
-            $db->query("SELECT COUNT(*) as total FROM du_an WHERE huong_nha IN (SELECT name FROM directions WHERE id = :id)");
+            $db->query("SELECT COUNT(*) as total FROM du_an WHERE huong_nha IN (SELECT name FROM huong_nha WHERE id = :id)");
             $db->bind(':id', $id);
             if ((int)$db->single()->total > 0) {
                 Session::flash('admin_msg', 'Không thể xóa: Hướng nhà đang được sử dụng trong tin đăng.', 'alert alert-danger');
@@ -378,7 +378,7 @@ class AdminDanhMucController extends Controller
             if ($success) LogService::write($adminId, 'delete', 'directions', $id, "Xóa hướng nhà ID #{$id}");
         } elseif ($type === 'legal_types') {
             // Kiểm tra liên kết: pháp lý đang được sử dụng trong tin đăng
-            $db->query("SELECT COUNT(*) as total FROM du_an WHERE phap_ly IN (SELECT code FROM legal_types WHERE id = :id)");
+            $db->query("SELECT COUNT(*) as total FROM du_an WHERE phap_ly IN (SELECT code FROM loai_phap_ly WHERE id = :id)");
             $db->bind(':id', $id);
             if ((int)$db->single()->total > 0) {
                 Session::flash('admin_msg', 'Không thể xóa: Loại pháp lý đang được sử dụng trong tin đăng.', 'alert alert-danger');

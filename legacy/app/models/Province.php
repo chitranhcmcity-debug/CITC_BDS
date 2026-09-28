@@ -1,11 +1,11 @@
 <?php
 /**
- * Model Province – Ánh xạ tới bảng tỉnh/thành phố `provinces`.
+ * Model Province – Ánh xạ tới bảng tỉnh/thành phố `tinh_thanh`.
  * Tuân thủ SOLID, Model Layer.
  */
 class Province extends Model
 {
-    protected string $table = 'provinces';
+    protected string $table = 'tinh_thanh';
 
     public int $id = 0;
     public string $code = '';

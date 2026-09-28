@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Permission extends Model
 {
-    protected $table = 'permissions';
+    protected $table = 'quyen_han';
 
     public $timestamps = false;
 
@@ -26,6 +26,6 @@ class Permission extends Model
 
     public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(VaiTro::class, 'role_permissions', 'permission_id', 'role_id');
+        return $this->belongsToMany(VaiTro::class, 'vai_tro_quyen_han', 'permission_id', 'role_id');
     }
 }

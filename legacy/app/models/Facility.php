@@ -1,11 +1,11 @@
 <?php
 /**
- * Model Facility – Ánh xạ tới bảng tiện ích `facilities`.
+ * Model Facility – Ánh xạ tới bảng tiện ích `tien_ich`.
  * Tuân thủ SOLID, Model Layer.
  */
 class Facility extends Model
 {
-    protected string $table = 'facilities';
+    protected string $table = 'tien_ich';
 
     public int $id = 0;
     public string $name = '';

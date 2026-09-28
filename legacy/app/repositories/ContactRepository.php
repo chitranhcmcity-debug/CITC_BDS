@@ -17,7 +17,7 @@ class ContactRepository
     public function create(array $data): int
     {
         $this->db->query("
-            INSERT INTO contacts (fullname, phone, email, subject, content, type, status, ip_address, browser, device)
+            INSERT INTO lien_he (fullname, phone, email, subject, content, type, status, ip_address, browser, device)
             VALUES (:fullname, :phone, :email, :subject, :content, :type, 'moi', :ip_address, :browser, :device)
         ");
         $this->db->bind(':fullname',   $data['fullname']);
@@ -40,7 +40,7 @@ class ContactRepository
     public function createAttachment(array $data): int
     {
         $this->db->query("
-            INSERT INTO contact_attachments (contact_id, file_name, file_path, file_type, file_size)
+            INSERT INTO tep_dinh_kem_lien_he (contact_id, file_name, file_path, file_type, file_size)
             VALUES (:contact_id, :file_name, :file_path, :file_type, :file_size)
         ");
         $this->db->bind(':contact_id', $data['contact_id']);
@@ -60,7 +60,7 @@ class ContactRepository
     {
         $this->db->query("
             SELECT c.*, u.ten AS admin_name, u.email AS admin_email 
-            FROM contacts c
+            FROM lien_he c
             LEFT JOIN nguoi_dung u ON c.assigned_admin = u.id
             WHERE c.id = :id
         ");
@@ -74,7 +74,7 @@ class ContactRepository
      */
     public function getAttachments(int $contactId): array
     {
-        $this->db->query("SELECT * FROM contact_attachments WHERE contact_id = :contact_id");
+        $this->db->query("SELECT * FROM tep_dinh_kem_lien_he WHERE contact_id = :contact_id");
         $this->db->bind(':contact_id', $contactId);
         return $this->db->resultSet() ?: [];
     }
@@ -85,7 +85,7 @@ class ContactRepository
     public function getHistory(string $email, string $phone, int $limit = 20, int $offset = 0): array
     {
         $this->db->query("
-            SELECT * FROM contacts 
+            SELECT * FROM lien_he 
             WHERE email = :email OR phone = :phone 
             ORDER BY created_at DESC 
             LIMIT :limit OFFSET :offset
@@ -102,7 +102,7 @@ class ContactRepository
      */
     public function countHistory(string $email, string $phone): int
     {
-        $this->db->query("SELECT COUNT(*) FROM contacts WHERE email = :email OR phone = :phone");
+        $this->db->query("SELECT COUNT(*) FROM lien_he WHERE email = :email OR phone = :phone");
         $this->db->bind(':email', $email);
         $this->db->bind(':phone', $phone);
         return (int)$this->db->singleColumn();
@@ -133,7 +133,7 @@ class ContactRepository
             return false;
         }
 
-        $this->db->query("UPDATE contacts SET " . implode(', ', $fields) . " WHERE id = :id");
+        $this->db->query("UPDATE lien_he SET " . implode(', ', $fields) . " WHERE id = :id");
         foreach ($params as $param => $val) {
             $this->db->bind($param, $val);
         }
@@ -145,7 +145,7 @@ class ContactRepository
      */
     public function delete(int $id): bool
     {
-        $this->db->query("DELETE FROM contacts WHERE id = :id");
+        $this->db->query("DELETE FROM lien_he WHERE id = :id");
         $this->db->bind(':id', $id);
         return $this->db->execute();
     }
@@ -187,7 +187,7 @@ class ContactRepository
 
         $this->db->query("
             SELECT c.*, u.ten AS admin_name 
-            FROM contacts c
+            FROM lien_he c
             LEFT JOIN nguoi_dung u ON c.assigned_admin = u.id
             $whereClause
             ORDER BY c.created_at DESC
@@ -238,7 +238,7 @@ class ContactRepository
 
         $whereClause = !empty($where) ? 'WHERE ' . implode(' AND ', $where) : '';
 
-        $this->db->query("SELECT COUNT(*) FROM contacts $whereClause");
+        $this->db->query("SELECT COUNT(*) FROM lien_he $whereClause");
         foreach ($params as $key => $val) {
             $this->db->bind($key, $val);
         }
@@ -253,15 +253,15 @@ class ContactRepository
         $stats = [];
 
         // Thống kê theo trạng thái
-        $this->db->query("SELECT status, COUNT(*) as count FROM contacts GROUP BY status");
+        $this->db->query("SELECT status, COUNT(*) as count FROM lien_he GROUP BY status");
         $stats['status'] = $this->db->resultSet() ?: [];
 
         // Thống kê theo loại yêu cầu
-        $this->db->query("SELECT type, COUNT(*) as count FROM contacts GROUP BY type");
+        $this->db->query("SELECT type, COUNT(*) as count FROM lien_he GROUP BY type");
         $stats['type'] = $this->db->resultSet() ?: [];
 
         // Thống kê thiết bị phổ biến
-        $this->db->query("SELECT device, COUNT(*) as count FROM contacts GROUP BY device");
+        $this->db->query("SELECT device, COUNT(*) as count FROM lien_he GROUP BY device");
         $stats['device'] = $this->db->resultSet() ?: [];
 
         return $stats;

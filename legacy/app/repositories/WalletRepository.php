@@ -178,7 +178,7 @@ class WalletRepository
      */
     public function getUpPackages(): array
     {
-        $this->db->query("SELECT * FROM up_packages WHERE status = 'active' ORDER BY token_count");
+        $this->db->query("SELECT * FROM goi_up_tin WHERE status = 'active' ORDER BY token_count");
         return $this->db->resultSet() ?: [];
     }
 
@@ -187,7 +187,7 @@ class WalletRepository
      */
     public function getUpPackageById(int $id): ?object
     {
-        $this->db->query("SELECT * FROM up_packages WHERE id = :id");
+        $this->db->query("SELECT * FROM goi_up_tin WHERE id = :id");
         $this->db->bind(':id', $id);
         $res = $this->db->single();
         return $res ?: null;
@@ -226,7 +226,7 @@ class WalletRepository
     public function createRewardHistory(array $data): bool
     {
         $this->db->query("
-            INSERT INTO reward_histories (referrer_id, referee_id, amount, status)
+            INSERT INTO lich_su_thuong (referrer_id, referee_id, amount, status)
             VALUES (:referrer_id, :referee_id, :amount, 'completed')
         ");
         $this->db->bind(':referrer_id', $data['referrer_id']);
@@ -242,7 +242,7 @@ class WalletRepository
     {
         $this->db->query("
             SELECT r.*, u.ten AS referee_name, u.email AS referee_email 
-            FROM reward_histories r
+            FROM lich_su_thuong r
             JOIN nguoi_dung u ON r.referee_id = u.id
             WHERE r.referrer_id = :uid 
             ORDER BY r.created_at DESC

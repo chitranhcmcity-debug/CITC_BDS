@@ -54,7 +54,7 @@ class AdminReportRepository
         }
         $posts = $this->one("SELECT COUNT(*) total_posts,SUM({$r}) new_posts,SUM(goi_vip>0) vip_posts,SUM(trang_thai='cho_duyet') pending_posts,SUM(trang_thai='tu_choi') rejected_posts,SUM(ngay_het_han<NOW()) expired_posts,COALESCE(SUM(luot_xem),0) views FROM du_an WHERE deleted_at IS NULL{$postFilter}", $postParams);
         $tx = $this->one("SELECT COUNT(*) transactions,COALESCE(SUM(so_tien),0) transaction_value,SUM(trang_thai='da_duyet') success_tx,SUM(trang_thai='tu_choi') failed_tx,COALESCE(SUM(CASE WHEN trang_thai='da_duyet' THEN so_tien ELSE 0 END),0) revenue FROM nap_tien WHERE {$r}", $p);
-        $events = $this->one("SELECT COALESCE(SUM(type='call'),0) calls,COALESCE(SUM(type='chat'),0) chats,COALESCE(SUM(type='save'),0) saves FROM post_analytics WHERE created_at BETWEEN :from AND :to", $p);
+        $events = $this->one("SELECT COALESCE(SUM(type='call'),0) calls,COALESCE(SUM(type='chat'),0) chats,COALESCE(SUM(type='save'),0) saves FROM thong_ke_bai_dang WHERE created_at BETWEEN :from AND :to", $p);
 
         return array_merge($users, $posts, $tx, $events);
     }
@@ -104,6 +104,6 @@ class AdminReportRepository
     {
         $p = [':from' => $f['from'].' 00:00:00', ':to' => $f['to'].' 23:59:59'];
 
-        return $this->one("SELECT COUNT(*) conversations,SUM(status='closed') closed_conversations,COALESCE(AVG(TIMESTAMPDIFF(MINUTE,created_at,COALESCE(closed_at,updated_at))),0) avg_minutes FROM live_chat_conversations WHERE created_at BETWEEN :from AND :to", $p);
+        return $this->one("SELECT COUNT(*) conversations,SUM(status='closed') closed_conversations,COALESCE(AVG(TIMESTAMPDIFF(MINUTE,created_at,COALESCE(closed_at,updated_at))),0) avg_minutes FROM hoi_thoai_truc_tuyen WHERE created_at BETWEEN :from AND :to", $p);
     }
 }

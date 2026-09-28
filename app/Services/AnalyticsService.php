@@ -73,7 +73,7 @@ class AnalyticsService
             $this->repo->incrementLegacyCounter($postId, 'luot_click_sdt');
         }
 
-        // 2. Chèn bản ghi phân tích vào bảng post_analytics
+        // 2. Chèn bản ghi phân tích vào bảng thong_ke_bai_dang
         $post = $this->repo->findPost($postId);
         $ownerId = $post ? (int) $post->ma_nguoi_dung : null;
 

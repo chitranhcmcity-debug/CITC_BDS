@@ -1,6 +1,6 @@
 <?php
 /**
- * NotificationRepository – Tương tác trực tiếp với bảng `notifications` trong CSDL.
+ * NotificationRepository – Tương tác trực tiếp với bảng `thong_bao_nguoi_dung` trong CSDL.
  * Tuân thủ SOLID, Repository Pattern.
  */
 class NotificationRepository
@@ -18,11 +18,11 @@ class NotificationRepository
     public function findById(int $id, ?int $userId = null): ?stdClass
     {
         if ($userId !== null) {
-            $this->db->query("SELECT * FROM notifications WHERE id = :id AND (user_id = :uid OR user_id IS NULL)");
+            $this->db->query("SELECT * FROM thong_bao_nguoi_dung WHERE id = :id AND (user_id = :uid OR user_id IS NULL)");
             $this->db->bind(':id', $id);
             $this->db->bind(':uid', $userId);
         } else {
-            $this->db->query("SELECT * FROM notifications WHERE id = :id");
+            $this->db->query("SELECT * FROM thong_bao_nguoi_dung WHERE id = :id");
             $this->db->bind(':id', $id);
         }
         return $this->db->single();
@@ -38,7 +38,7 @@ class NotificationRepository
     public function recentByUser(int $userId, int $limit = 10): array
     {
         $this->db->query("
-            SELECT * FROM notifications 
+            SELECT * FROM thong_bao_nguoi_dung 
             WHERE user_id = :uid OR user_id IS NULL
             ORDER BY created_at DESC 
             LIMIT :limit
@@ -53,7 +53,7 @@ class NotificationRepository
      */
     public function paginateByUser(int $userId, string $filter, int $limit, int $offset, string $search = ''): array
     {
-        $sql = "SELECT * FROM notifications WHERE (user_id = :uid OR user_id IS NULL)";
+        $sql = "SELECT * FROM thong_bao_nguoi_dung WHERE (user_id = :uid OR user_id IS NULL)";
         $sql .= $this->buildFilterClause($filter);
 
         if (!empty($search)) {
@@ -80,7 +80,7 @@ class NotificationRepository
      */
     public function countByUser(int $userId, string $filter, string $search = ''): int
     {
-        $sql = "SELECT COUNT(*) as total FROM notifications WHERE (user_id = :uid OR user_id IS NULL)";
+        $sql = "SELECT COUNT(*) as total FROM thong_bao_nguoi_dung WHERE (user_id = :uid OR user_id IS NULL)";
         $sql .= $this->buildFilterClause($filter);
 
         if (!empty($search)) {
@@ -104,7 +104,7 @@ class NotificationRepository
      */
     public function countUnread(int $userId): int
     {
-        $this->db->query("SELECT COUNT(*) as total FROM notifications WHERE user_id = :uid AND is_read = 0");
+        $this->db->query("SELECT COUNT(*) as total FROM thong_bao_nguoi_dung WHERE user_id = :uid AND is_read = 0");
         $this->db->bind(':uid', $userId);
         $row = $this->db->single();
         return (int)($row->total ?? 0);
@@ -115,7 +115,7 @@ class NotificationRepository
      */
     public function insert(array $data): int
     {
-        $this->db->query("INSERT INTO notifications (user_id, type, title, content, url, icon, is_read, created_at)
+        $this->db->query("INSERT INTO thong_bao_nguoi_dung (user_id, type, title, content, url, icon, is_read, created_at)
                           VALUES (:uid, :type, :title, :content, :url, :icon, :is_read, :created)");
         
         $this->db->bind(':uid',     $data['user_id']);
@@ -141,7 +141,7 @@ class NotificationRepository
      */
     public function updateReadStatus(int $id, int $userId, bool $isRead): bool
     {
-        $this->db->query("UPDATE notifications SET is_read = :read WHERE id = :id AND (user_id = :uid OR user_id IS NULL)");
+        $this->db->query("UPDATE thong_bao_nguoi_dung SET is_read = :read WHERE id = :id AND (user_id = :uid OR user_id IS NULL)");
         $this->db->bind(':read', $isRead ? 1 : 0);
         $this->db->bind(':id', $id);
         $this->db->bind(':uid', $userId);
@@ -153,7 +153,7 @@ class NotificationRepository
      */
     public function markAllRead(int $userId): bool
     {
-        $this->db->query("UPDATE notifications SET is_read = 1 WHERE user_id = :uid AND is_read = 0");
+        $this->db->query("UPDATE thong_bao_nguoi_dung SET is_read = 1 WHERE user_id = :uid AND is_read = 0");
         $this->db->bind(':uid', $userId);
         return $this->db->execute();
     }
@@ -163,7 +163,7 @@ class NotificationRepository
      */
     public function delete(int $id, int $userId): bool
     {
-        $this->db->query("DELETE FROM notifications WHERE id = :id AND user_id = :uid");
+        $this->db->query("DELETE FROM thong_bao_nguoi_dung WHERE id = :id AND user_id = :uid");
         $this->db->bind(':id', $id);
         $this->db->bind(':uid', $userId);
         return $this->db->execute();
@@ -174,7 +174,7 @@ class NotificationRepository
      */
     public function clearAll(int $userId): bool
     {
-        $this->db->query("DELETE FROM notifications WHERE user_id = :uid");
+        $this->db->query("DELETE FROM thong_bao_nguoi_dung WHERE user_id = :uid");
         $this->db->bind(':uid', $userId);
         return $this->db->execute();
     }
@@ -187,7 +187,7 @@ class NotificationRepository
         $this->db->query("SELECT COUNT(*) as total,
                                  SUM(CASE WHEN is_read = 1 THEN 1 ELSE 0 END) as read_count,
                                  SUM(CASE WHEN is_read = 0 THEN 1 ELSE 0 END) as unread_count
-                          FROM notifications");
+                          FROM thong_bao_nguoi_dung");
         $row = $this->db->single();
         $total = (int)($row->total ?? 0);
         $read = (int)($row->read_count ?? 0);
@@ -207,7 +207,7 @@ class NotificationRepository
      */
     public function getAdminRecentSent(int $limit, int $offset): array
     {
-        $this->db->query("SELECT * FROM notifications 
+        $this->db->query("SELECT * FROM thong_bao_nguoi_dung 
                           ORDER BY created_at DESC 
                           LIMIT :limit OFFSET :offset");
         $this->db->bind(':limit', $limit);
@@ -220,7 +220,7 @@ class NotificationRepository
      */
     public function deleteExpiredNotification(int $id): bool
     {
-        $this->db->query("DELETE FROM notifications WHERE id = :id");
+        $this->db->query("DELETE FROM thong_bao_nguoi_dung WHERE id = :id");
         $this->db->bind(':id', $id);
         return $this->db->execute();
     }

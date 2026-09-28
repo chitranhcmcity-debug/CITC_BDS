@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class LiveChatMessage extends Model
 {
-    protected $table = 'live_chat_messages';
+    protected $table = 'tin_nhan_truc_tuyen';
 
     const CREATED_AT = 'created_at';
 

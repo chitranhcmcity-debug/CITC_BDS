@@ -6,7 +6,7 @@ use App\Models\Database;
 use PDO;
 
 /**
- * ProvinceRepository – Truy vấn CSDL cho bảng `provinces`.
+ * ProvinceRepository – Truy vấn CSDL cho bảng `tinh_thanh`.
  * Tuân thủ SOLID, Repository Pattern.
  */
 class ProvinceRepository
@@ -20,7 +20,7 @@ class ProvinceRepository
 
     public function getAll(string $search = ''): array
     {
-        $sql = 'SELECT * FROM provinces';
+        $sql = 'SELECT * FROM tinh_thanh';
         if (! empty($search)) {
             $sql .= ' WHERE name LIKE :search OR code LIKE :search';
         }
@@ -36,7 +36,7 @@ class ProvinceRepository
 
     public function findById(int $id): ?object
     {
-        $this->db->query('SELECT * FROM provinces WHERE id = :id LIMIT 1');
+        $this->db->query('SELECT * FROM tinh_thanh WHERE id = :id LIMIT 1');
         $this->db->bind(':id', $id, PDO::PARAM_INT);
         $res = $this->db->single();
 
@@ -45,7 +45,7 @@ class ProvinceRepository
 
     public function findByCode(string $code): ?object
     {
-        $this->db->query('SELECT * FROM provinces WHERE code = :code LIMIT 1');
+        $this->db->query('SELECT * FROM tinh_thanh WHERE code = :code LIMIT 1');
         $this->db->bind(':code', $code);
         $res = $this->db->single();
 
@@ -55,7 +55,7 @@ class ProvinceRepository
     public function create(array $data): int
     {
         $this->db->query('
-            INSERT INTO provinces (code, name, type, sort_order, status) 
+            INSERT INTO tinh_thanh (code, name, type, sort_order, status) 
             VALUES (:code, :name, :type, :sort_order, :status)
         ');
         $this->db->bind(':code', $data['code']);
@@ -76,7 +76,7 @@ class ProvinceRepository
     public function update(int $id, array $data): bool
     {
         $this->db->query('
-            UPDATE provinces 
+            UPDATE tinh_thanh 
             SET code = :code, name = :name, type = :type, sort_order = :sort_order, status = :status
             WHERE id = :id
         ');
@@ -92,7 +92,7 @@ class ProvinceRepository
 
     public function delete(int $id): bool
     {
-        $this->db->query('DELETE FROM provinces WHERE id = :id');
+        $this->db->query('DELETE FROM tinh_thanh WHERE id = :id');
         $this->db->bind(':id', $id, PDO::PARAM_INT);
 
         return $this->db->execute();

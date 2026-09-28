@@ -8,7 +8,7 @@ class PostAnalytics extends Model
     public function __construct()
     {
         parent::__construct();
-        $this->table = 'post_analytics';
+        $this->table = 'thong_ke_bai_dang';
     }
 
     public static function isValidType(string $type): bool

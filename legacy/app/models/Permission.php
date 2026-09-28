@@ -1,11 +1,11 @@
 <?php
 /**
- * Model Permission – Ánh xạ tới bảng quyền `system_log_permissions`.
+ * Model Permission – Ánh xạ tới bảng quyền `quyen_nhat_ky_he_thong`.
  * Tuân thủ SOLID, Model Layer.
  */
 class Permission extends Model
 {
-    protected string $table = 'system_log_permissions';
+    protected string $table = 'quyen_nhat_ky_he_thong';
 
     public function __construct()
     {

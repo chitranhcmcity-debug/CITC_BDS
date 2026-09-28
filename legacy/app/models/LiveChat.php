@@ -5,7 +5,7 @@ class LiveChat extends Model
     public function __construct()
     {
         parent::__construct();
-        $this->table = 'live_chat_conversations';
+        $this->table = 'hoi_thoai_truc_tuyen';
     }
 
     public function getOrCreateConversation(array $identity): object|false
@@ -14,12 +14,12 @@ class LiveChat extends Model
         $guestToken = $identity['guest_token'] ?? null;
 
         if ($userId) {
-            $this->db->query("SELECT * FROM live_chat_conversations
+            $this->db->query("SELECT * FROM hoi_thoai_truc_tuyen
                               WHERE ma_nguoi_dung = :uid AND status <> 'closed'
                               ORDER BY id DESC LIMIT 1");
             $this->db->bind(':uid', (int)$userId);
         } else {
-            $this->db->query("SELECT * FROM live_chat_conversations
+            $this->db->query("SELECT * FROM hoi_thoai_truc_tuyen
                               WHERE guest_token = :token AND status <> 'closed'
                               ORDER BY id DESC LIMIT 1");
             $this->db->bind(':token', $guestToken);
@@ -30,7 +30,7 @@ class LiveChat extends Model
             return $existing;
         }
 
-        $this->db->query("INSERT INTO live_chat_conversations
+        $this->db->query("INSERT INTO hoi_thoai_truc_tuyen
             (guest_token, ma_nguoi_dung, customer_name, customer_email, customer_phone, status, last_message_at)
             VALUES (:guest_token, :user_id, :name, :email, :phone, 'waiting', NOW())");
         $this->db->bind(':guest_token', $guestToken);
@@ -49,7 +49,7 @@ class LiveChat extends Model
     public function findConversation(int $id): object|false
     {
         $this->db->query("SELECT c.*, nd.ten AS staff_name
-                          FROM live_chat_conversations c
+                          FROM hoi_thoai_truc_tuyen c
                           LEFT JOIN nguoi_dung nd ON c.assigned_staff_id = nd.id
                           WHERE c.id = :id");
         $this->db->bind(':id', $id);
@@ -60,7 +60,7 @@ class LiveChat extends Model
     {
         if ($userId) {
             $this->db->query("SELECT c.*, nd.ten AS staff_name
-                              FROM live_chat_conversations c
+                              FROM hoi_thoai_truc_tuyen c
                               LEFT JOIN nguoi_dung nd ON c.assigned_staff_id = nd.id
                               WHERE c.ma_nguoi_dung = :uid AND c.status <> 'closed'
                               ORDER BY c.id DESC LIMIT 1");
@@ -70,7 +70,7 @@ class LiveChat extends Model
 
         if ($guestToken) {
             $this->db->query("SELECT c.*, nd.ten AS staff_name
-                              FROM live_chat_conversations c
+                              FROM hoi_thoai_truc_tuyen c
                               LEFT JOIN nguoi_dung nd ON c.assigned_staff_id = nd.id
                               WHERE c.guest_token = :token AND c.status <> 'closed'
                               ORDER BY c.id DESC LIMIT 1");
@@ -101,7 +101,7 @@ class LiveChat extends Model
         try {
             $this->db->beginTransaction();
 
-            $this->db->query("INSERT INTO live_chat_messages
+            $this->db->query("INSERT INTO tin_nhan_truc_tuyen
                 (conversation_id, sender_type, sender_id, sender_name, message, is_read_by_admin, is_read_by_customer)
                 VALUES (:conversation_id, :sender_type, :sender_id, :sender_name, :message, :read_admin, :read_customer)");
             $this->db->bind(':conversation_id', $conversationId);
@@ -121,7 +121,7 @@ class LiveChat extends Model
             $statusSql = $isAdminSide ? "status = IF(status = 'closed', 'open', status)" : "status = IF(status = 'closed', 'waiting', status)";
             $unreadColumn = $isAdminSide ? 'unread_customer' : 'unread_admin';
 
-            $this->db->query("UPDATE live_chat_conversations
+            $this->db->query("UPDATE hoi_thoai_truc_tuyen
                               SET {$statusSql},
                                   last_message = :last_message,
                                   last_message_at = NOW(),
@@ -144,7 +144,7 @@ class LiveChat extends Model
 
     public function getMessages(int $conversationId, int $afterId = 0): array
     {
-        $this->db->query("SELECT * FROM live_chat_messages
+        $this->db->query("SELECT * FROM tin_nhan_truc_tuyen
                           WHERE conversation_id = :conversation_id AND id > :after_id AND is_internal = 0
                           ORDER BY id ASC LIMIT 100");
         $this->db->bind(':conversation_id', $conversationId);
@@ -160,7 +160,7 @@ class LiveChat extends Model
         }
 
         $this->db->query("SELECT c.*, nd.ten AS staff_name
-                          FROM live_chat_conversations c
+                          FROM hoi_thoai_truc_tuyen c
                           LEFT JOIN nguoi_dung nd ON c.assigned_staff_id = nd.id
                           {$where}
                           ORDER BY c.priority DESC, c.last_message_at DESC, c.id DESC
@@ -173,7 +173,7 @@ class LiveChat extends Model
 
     public function claimConversation(int $conversationId, int $staffId): bool
     {
-        $this->db->query("UPDATE live_chat_conversations
+        $this->db->query("UPDATE hoi_thoai_truc_tuyen
                           SET assigned_staff_id = :staff_id, status = 'open', updated_at = NOW()
                           WHERE id = :id");
         $this->db->bind(':staff_id', $staffId);
@@ -183,7 +183,7 @@ class LiveChat extends Model
 
     public function closeConversation(int $conversationId): bool
     {
-        $this->db->query("UPDATE live_chat_conversations
+        $this->db->query("UPDATE hoi_thoai_truc_tuyen
                           SET status = 'closed', unread_admin = 0, unread_customer = 0, closed_at = NOW(), updated_at = NOW()
                           WHERE id = :id");
         $this->db->bind(':id', $conversationId);
@@ -192,22 +192,22 @@ class LiveChat extends Model
 
     public function markReadByAdmin(int $conversationId): bool
     {
-        $this->db->query("UPDATE live_chat_conversations SET unread_admin = 0 WHERE id = :id");
+        $this->db->query("UPDATE hoi_thoai_truc_tuyen SET unread_admin = 0 WHERE id = :id");
         $this->db->bind(':id', $conversationId);
         $ok = $this->db->execute();
 
-        $this->db->query("UPDATE live_chat_messages SET is_read_by_admin = 1 WHERE conversation_id = :id");
+        $this->db->query("UPDATE tin_nhan_truc_tuyen SET is_read_by_admin = 1 WHERE conversation_id = :id");
         $this->db->bind(':id', $conversationId);
         return $this->db->execute() && $ok;
     }
 
     public function markReadByCustomer(int $conversationId): bool
     {
-        $this->db->query("UPDATE live_chat_conversations SET unread_customer = 0 WHERE id = :id");
+        $this->db->query("UPDATE hoi_thoai_truc_tuyen SET unread_customer = 0 WHERE id = :id");
         $this->db->bind(':id', $conversationId);
         $ok = $this->db->execute();
 
-        $this->db->query("UPDATE live_chat_messages SET is_read_by_customer = 1 WHERE conversation_id = :id");
+        $this->db->query("UPDATE tin_nhan_truc_tuyen SET is_read_by_customer = 1 WHERE conversation_id = :id");
         $this->db->bind(':id', $conversationId);
         return $this->db->execute() && $ok;
     }
@@ -215,7 +215,7 @@ class LiveChat extends Model
     public function countWaitingForAdmin(): int
     {
         $this->db->query("SELECT COUNT(*) AS count
-                          FROM live_chat_conversations
+                          FROM hoi_thoai_truc_tuyen
                           WHERE status <> 'closed' AND unread_admin > 0");
         return (int)($this->db->single()->count ?? 0);
     }
@@ -228,7 +228,7 @@ class LiveChat extends Model
             SUM(status = 'open') AS open_count,
             SUM(status = 'closed') AS closed_count,
             SUM(DATE(created_at) = CURDATE()) AS today
-            FROM live_chat_conversations");
+            FROM hoi_thoai_truc_tuyen");
         $row = $this->db->single();
         return [
             'total' => (int)($row->total ?? 0),

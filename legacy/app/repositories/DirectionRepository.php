@@ -1,6 +1,6 @@
 <?php
 /**
- * DirectionRepository – Truy vấn CSDL cho bảng `directions`.
+ * DirectionRepository – Truy vấn CSDL cho bảng `huong_nha`.
  * Tuân thủ SOLID, Repository Pattern.
  */
 class DirectionRepository
@@ -14,7 +14,7 @@ class DirectionRepository
 
     public function getAll(string $search = ''): array
     {
-        $sql = "SELECT * FROM directions";
+        $sql = "SELECT * FROM huong_nha";
         if (!empty($search)) {
             $sql .= " WHERE name LIKE :search OR code LIKE :search";
         }
@@ -29,7 +29,7 @@ class DirectionRepository
 
     public function findById(int $id): ?object
     {
-        $this->db->query("SELECT * FROM directions WHERE id = :id LIMIT 1");
+        $this->db->query("SELECT * FROM huong_nha WHERE id = :id LIMIT 1");
         $this->db->bind(':id', $id, PDO::PARAM_INT);
         $res = $this->db->single();
         return $res ? $res : null;
@@ -38,7 +38,7 @@ class DirectionRepository
     public function create(array $data): int
     {
         $this->db->query("
-            INSERT INTO directions (name, code, sort_order, status) 
+            INSERT INTO huong_nha (name, code, sort_order, status) 
             VALUES (:name, :code, :sort_order, :status)
         ");
         $this->db->bind(':name',       $data['name']);
@@ -56,7 +56,7 @@ class DirectionRepository
     public function update(int $id, array $data): bool
     {
         $this->db->query("
-            UPDATE directions 
+            UPDATE huong_nha 
             SET name = :name, code = :code, sort_order = :sort_order, status = :status
             WHERE id = :id
         ");
@@ -71,14 +71,14 @@ class DirectionRepository
 
     public function delete(int $id): bool
     {
-        $this->db->query("DELETE FROM directions WHERE id = :id");
+        $this->db->query("DELETE FROM huong_nha WHERE id = :id");
         $this->db->bind(':id', $id, PDO::PARAM_INT);
         return $this->db->execute();
     }
 
     public function changeStatus(int $id, string $status): bool
     {
-        $this->db->query("UPDATE directions SET status = :status WHERE id = :id");
+        $this->db->query("UPDATE huong_nha SET status = :status WHERE id = :id");
         $this->db->bind(':status', $status);
         $this->db->bind(':id', $id, PDO::PARAM_INT);
         return $this->db->execute();
@@ -86,7 +86,7 @@ class DirectionRepository
 
     public function updateSortOrder(int $id, int $sortOrder): bool
     {
-        $this->db->query("UPDATE directions SET sort_order = :sort_order WHERE id = :id");
+        $this->db->query("UPDATE huong_nha SET sort_order = :sort_order WHERE id = :id");
         $this->db->bind(':sort_order', $sortOrder, PDO::PARAM_INT);
         $this->db->bind(':id', $id, PDO::PARAM_INT);
         return $this->db->execute();

@@ -13,7 +13,7 @@ class AdminDashboardRepository
             'users' => $this->one("SELECT COUNT(*) total, SUM(DATE(ngay_tao)=CURDATE()) today, SUM(last_login_at>=DATE_SUB(NOW(),INTERVAL 15 MINUTE)) online FROM nguoi_dung"),
             'posts' => $this->one("SELECT COUNT(*) total, SUM(trang_thai='cho_duyet') pending, SUM(goi_vip>0 AND ngay_het_han_vip>=NOW()) vip, SUM(ngay_het_han<NOW()) expired FROM du_an WHERE deleted_at IS NULL"),
             'money' => $this->one("SELECT COALESCE(SUM(IF(trang_thai='da_duyet' AND DATE(ngay_tao)=CURDATE(),tong_cong,0)),0) today, COALESCE(SUM(IF(trang_thai='da_duyet' AND YEAR(ngay_tao)=YEAR(CURDATE()) AND MONTH(ngay_tao)=MONTH(CURDATE()),tong_cong,0)),0) month, COUNT(*) transactions FROM nap_tien"),
-            'chat' => $this->one("SELECT COUNT(*) chats FROM chat_conversations"),
+            'chat' => $this->one("SELECT COUNT(*) chats FROM hoi_thoai"),
         ];
     }
 
@@ -24,8 +24,8 @@ class AdminDashboardRepository
             (SELECT COALESCE(SUM(tong_cong),0) FROM nap_tien WHERE trang_thai='da_duyet' AND DATE(ngay_tao)=d.day) revenue,
             (SELECT COUNT(*) FROM nguoi_dung WHERE DATE(ngay_tao)=d.day) users,
             (SELECT COUNT(*) FROM du_an WHERE DATE(ngay_tao)=d.day) posts,
-            (SELECT COUNT(*) FROM post_analytics WHERE DATE(created_at)=d.day AND type='view') views,
-            (SELECT COUNT(*) FROM chat_conversations WHERE DATE(created_at)=d.day) chats
+            (SELECT COUNT(*) FROM thong_ke_bai_dang WHERE DATE(created_at)=d.day AND type='view') views,
+            (SELECT COUNT(*) FROM hoi_thoai WHERE DATE(created_at)=d.day) chats
           FROM (SELECT DATE(ngay_tao) day FROM nguoi_dung WHERE ngay_tao>=DATE_SUB(CURDATE(),INTERVAL {$days} DAY)
                 UNION SELECT DATE(ngay_tao) FROM du_an WHERE ngay_tao>=DATE_SUB(CURDATE(),INTERVAL {$days} DAY)
                 UNION SELECT CURDATE()) d ORDER BY d.day");
@@ -42,8 +42,8 @@ class AdminDashboardRepository
     }
 
     public function pending(): array { return $this->all("SELECT p.id,p.tieu_de,p.duong_dan,p.ngay_tao,c.ten ten_danh_muc,u.ten ten_nguoi_dung,u.anh_dai_dien FROM du_an p LEFT JOIN danh_muc c ON c.id=p.ma_danh_muc LEFT JOIN nguoi_dung u ON u.id=p.ma_nguoi_dung WHERE p.trang_thai='cho_duyet' AND p.deleted_at IS NULL ORDER BY p.ngay_tao DESC LIMIT 5"); }
-    public function recentErrors(): array { return $this->all("SELECT id,module,level,message,created_at FROM error_logs WHERE resolved=0 ORDER BY created_at DESC LIMIT 8"); }
-    public function recentActivity(): array { return $this->all('SELECT id,user_id,action,model_type,description,created_at FROM system_logs ORDER BY created_at DESC LIMIT 10'); }
+    public function recentErrors(): array { return $this->all("SELECT id,module,level,message,created_at FROM nhat_ky_loi WHERE resolved=0 ORDER BY created_at DESC LIMIT 8"); }
+    public function recentActivity(): array { return $this->all('SELECT id,user_id,action,model_type,description,created_at FROM nhat_ky_he_thong ORDER BY created_at DESC LIMIT 10'); }
 
     private function one(string $sql): array { $this->db->query($sql); return (array)($this->db->single() ?: []); }
     private function all(string $sql): array { $this->db->query($sql); return $this->db->resultSet() ?: []; }

@@ -1,6 +1,6 @@
 <?php
 /**
- * TokenRepository – Quản lý user_tokens (email_verify, reset_password, remember_me).
+ * TokenRepository – Quản lý ma_truy_cap_nguoi_dung (email_verify, reset_password, remember_me).
  */
 class TokenRepository
 {
@@ -27,7 +27,7 @@ class TokenRepository
         $expiresAt = date('Y-m-d H:i:s', strtotime("+{$ttlMin} minutes"));
 
         $this->db->query(
-            "INSERT INTO user_tokens (user_id, token, type, expires_at)
+            "INSERT INTO ma_truy_cap_nguoi_dung (user_id, token, type, expires_at)
              VALUES (:uid, :tok, :type, :exp)"
         );
         $this->db->bind(':uid',  $userId);
@@ -45,7 +45,7 @@ class TokenRepository
     public function findValid(string $token, string $type): mixed
     {
         $this->db->query(
-            "SELECT * FROM user_tokens
+            "SELECT * FROM ma_truy_cap_nguoi_dung
              WHERE token = :tok
                AND type  = :type
                AND used_at IS NULL
@@ -64,7 +64,7 @@ class TokenRepository
     public function findAny(string $token, string $type): mixed
     {
         $this->db->query(
-            "SELECT * FROM user_tokens WHERE token = :tok AND type = :type LIMIT 1"
+            "SELECT * FROM ma_truy_cap_nguoi_dung WHERE token = :tok AND type = :type LIMIT 1"
         );
         $this->db->bind(':tok',  hash('sha256', $token));
         $this->db->bind(':type', $type);
@@ -77,7 +77,7 @@ class TokenRepository
      */
     public function markUsed(int $id): bool
     {
-        $this->db->query("UPDATE user_tokens SET used_at = NOW() WHERE id = :id");
+        $this->db->query("UPDATE ma_truy_cap_nguoi_dung SET used_at = NOW() WHERE id = :id");
         $this->db->bind(':id', $id);
         return $this->db->execute();
     }
@@ -88,7 +88,7 @@ class TokenRepository
     public function deleteByUserAndType(int $userId, string $type): bool
     {
         $this->db->query(
-            "DELETE FROM user_tokens WHERE user_id = :uid AND type = :type"
+            "DELETE FROM ma_truy_cap_nguoi_dung WHERE user_id = :uid AND type = :type"
         );
         $this->db->bind(':uid',  $userId);
         $this->db->bind(':type', $type);
@@ -100,7 +100,7 @@ class TokenRepository
      */
     public function deleteAllByUser(int $userId): bool
     {
-        $this->db->query("DELETE FROM user_tokens WHERE user_id = :uid");
+        $this->db->query("DELETE FROM ma_truy_cap_nguoi_dung WHERE user_id = :uid");
         $this->db->bind(':uid', $userId);
         return $this->db->execute();
     }
@@ -110,7 +110,7 @@ class TokenRepository
      */
     public function deleteExpired(): int
     {
-        $this->db->query("DELETE FROM user_tokens WHERE expires_at < NOW()");
+        $this->db->query("DELETE FROM ma_truy_cap_nguoi_dung WHERE expires_at < NOW()");
         $this->db->execute();
         return $this->db->rowCount();
     }

@@ -1,11 +1,11 @@
 <?php
 /**
- * Model District – Ánh xạ tới bảng quận/huyện `districts`.
+ * Model District – Ánh xạ tới bảng quận/huyện `quan_huyen`.
  * Tuân thủ SOLID, Model Layer.
  */
 class District extends Model
 {
-    protected string $table = 'districts';
+    protected string $table = 'quan_huyen';
 
     public int $id = 0;
     public string $code = '';

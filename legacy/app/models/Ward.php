@@ -1,11 +1,11 @@
 <?php
 /**
- * Model Ward – Ánh xạ tới bảng phường/xã `wards`.
+ * Model Ward – Ánh xạ tới bảng phường/xã `phuong_xa`.
  * Tuân thủ SOLID, Model Layer.
  */
 class Ward extends Model
 {
-    protected string $table = 'wards';
+    protected string $table = 'phuong_xa';
 
     public int $id = 0;
     public string $code = '';

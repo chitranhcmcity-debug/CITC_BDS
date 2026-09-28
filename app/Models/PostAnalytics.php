@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PostAnalytics extends Model
 {
-    protected $table = 'post_analytics';
+    protected $table = 'thong_ke_bai_dang';
 
     const CREATED_AT = 'created_at';
 

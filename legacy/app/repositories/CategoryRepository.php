@@ -1,6 +1,6 @@
 <?php
 /**
- * CategoryRepository – Truy vấn cơ sở dữ liệu cho bảng `categories`.
+ * CategoryRepository – Truy vấn cơ sở dữ liệu cho bảng `nhom_danh_muc`.
  * Hỗ trợ các phương thức CRUD, đổi trạng thái và tương thích ngược với hệ thống cũ.
  * Tuân thủ SOLID, Repository Pattern.
  */
@@ -20,7 +20,7 @@ class CategoryRepository
     {
         $this->db->query("
             SELECT id, name as ten, slug as duong_dan 
-            FROM categories 
+            FROM nhom_danh_muc 
             WHERE status = 'active' 
             ORDER BY sort_order ASC, name ASC
         ");
@@ -32,7 +32,7 @@ class CategoryRepository
      */
     public function exists(int $id): bool
     {
-        $this->db->query("SELECT 1 FROM categories WHERE id = :id AND status = 'active'");
+        $this->db->query("SELECT 1 FROM nhom_danh_muc WHERE id = :id AND status = 'active'");
         $this->db->bind(':id', $id, PDO::PARAM_INT);
         return (bool)$this->db->single();
     }
@@ -42,7 +42,7 @@ class CategoryRepository
      */
     public function getAll(string $search = ''): array
     {
-        $sql = "SELECT * FROM categories";
+        $sql = "SELECT * FROM nhom_danh_muc";
         if (!empty($search)) {
             $sql .= " WHERE name LIKE :search OR slug LIKE :search OR code LIKE :search";
         }
@@ -60,7 +60,7 @@ class CategoryRepository
      */
     public function findById(int $id): ?object
     {
-        $this->db->query("SELECT * FROM categories WHERE id = :id LIMIT 1");
+        $this->db->query("SELECT * FROM nhom_danh_muc WHERE id = :id LIMIT 1");
         $this->db->bind(':id', $id, PDO::PARAM_INT);
         $res = $this->db->single();
         return $res ? $res : null;
@@ -71,7 +71,7 @@ class CategoryRepository
      */
     public function findBySlug(string $slug): ?object
     {
-        $this->db->query("SELECT * FROM categories WHERE slug = :slug LIMIT 1");
+        $this->db->query("SELECT * FROM nhom_danh_muc WHERE slug = :slug LIMIT 1");
         $this->db->bind(':slug', $slug);
         $res = $this->db->single();
         return $res ? $res : null;
@@ -83,7 +83,7 @@ class CategoryRepository
     public function create(array $data): int
     {
         $this->db->query("
-            INSERT INTO categories (name, slug, code, icon, description, sort_order, color, status) 
+            INSERT INTO nhom_danh_muc (name, slug, code, icon, description, sort_order, color, status) 
             VALUES (:name, :slug, :code, :icon, :description, :sort_order, :color, :status)
         ");
         $this->db->bind(':name',        $data['name']);
@@ -108,7 +108,7 @@ class CategoryRepository
     public function update(int $id, array $data): bool
     {
         $this->db->query("
-            UPDATE categories 
+            UPDATE nhom_danh_muc 
             SET name = :name, slug = :slug, code = :code, icon = :icon, 
                 description = :description, sort_order = :sort_order, color = :color, status = :status
             WHERE id = :id
@@ -131,7 +131,7 @@ class CategoryRepository
      */
     public function delete(int $id): bool
     {
-        $this->db->query("DELETE FROM categories WHERE id = :id");
+        $this->db->query("DELETE FROM nhom_danh_muc WHERE id = :id");
         $this->db->bind(':id', $id, PDO::PARAM_INT);
         return $this->db->execute();
     }
@@ -141,7 +141,7 @@ class CategoryRepository
      */
     public function changeStatus(int $id, string $status): bool
     {
-        $this->db->query("UPDATE categories SET status = :status WHERE id = :id");
+        $this->db->query("UPDATE nhom_danh_muc SET status = :status WHERE id = :id");
         $this->db->bind(':status', $status);
         $this->db->bind(':id', $id, PDO::PARAM_INT);
         return $this->db->execute();
@@ -152,7 +152,7 @@ class CategoryRepository
      */
     public function updateSortOrder(int $id, int $sortOrder): bool
     {
-        $this->db->query("UPDATE categories SET sort_order = :sort_order WHERE id = :id");
+        $this->db->query("UPDATE nhom_danh_muc SET sort_order = :sort_order WHERE id = :id");
         $this->db->bind(':sort_order', $sortOrder, PDO::PARAM_INT);
         $this->db->bind(':id', $id, PDO::PARAM_INT);
         return $this->db->execute();

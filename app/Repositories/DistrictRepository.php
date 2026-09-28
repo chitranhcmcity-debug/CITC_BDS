@@ -6,7 +6,7 @@ use App\Models\Database;
 use PDO;
 
 /**
- * DistrictRepository – Truy vấn CSDL cho bảng `districts`.
+ * DistrictRepository – Truy vấn CSDL cho bảng `quan_huyen`.
  * Tuân thủ SOLID, Repository Pattern.
  */
 class DistrictRepository
@@ -21,8 +21,8 @@ class DistrictRepository
     public function getAll(string $search = ''): array
     {
         $sql = 'SELECT d.*, p.name as province_name 
-                FROM districts d 
-                JOIN provinces p ON d.province_code = p.code';
+                FROM quan_huyen d 
+                JOIN tinh_thanh p ON d.province_code = p.code';
         if (! empty($search)) {
             $sql .= ' WHERE d.name LIKE :search OR d.code LIKE :search OR p.name LIKE :search';
         }
@@ -38,7 +38,7 @@ class DistrictRepository
 
     public function findById(int $id): ?object
     {
-        $this->db->query('SELECT * FROM districts WHERE id = :id LIMIT 1');
+        $this->db->query('SELECT * FROM quan_huyen WHERE id = :id LIMIT 1');
         $this->db->bind(':id', $id, PDO::PARAM_INT);
         $res = $this->db->single();
 
@@ -47,7 +47,7 @@ class DistrictRepository
 
     public function findByCode(string $code): ?object
     {
-        $this->db->query('SELECT * FROM districts WHERE code = :code LIMIT 1');
+        $this->db->query('SELECT * FROM quan_huyen WHERE code = :code LIMIT 1');
         $this->db->bind(':code', $code);
         $res = $this->db->single();
 
@@ -56,7 +56,7 @@ class DistrictRepository
 
     public function getByProvince(string $provinceCode): array
     {
-        $this->db->query("SELECT * FROM districts WHERE province_code = :prov AND status = 'active' ORDER BY sort_order ASC, name ASC");
+        $this->db->query("SELECT * FROM quan_huyen WHERE province_code = :prov AND status = 'active' ORDER BY sort_order ASC, name ASC");
         $this->db->bind(':prov', $provinceCode);
 
         return $this->db->resultSet() ?: [];
@@ -65,7 +65,7 @@ class DistrictRepository
     public function create(array $data): int
     {
         $this->db->query('
-            INSERT INTO districts (code, province_code, name, type, sort_order, status) 
+            INSERT INTO quan_huyen (code, province_code, name, type, sort_order, status) 
             VALUES (:code, :province_code, :name, :type, :sort_order, :status)
         ');
         $this->db->bind(':code', $data['code']);
@@ -87,7 +87,7 @@ class DistrictRepository
     public function update(int $id, array $data): bool
     {
         $this->db->query('
-            UPDATE districts 
+            UPDATE quan_huyen 
             SET code = :code, province_code = :province_code, name = :name, type = :type, 
                 sort_order = :sort_order, status = :status
             WHERE id = :id
@@ -105,7 +105,7 @@ class DistrictRepository
 
     public function delete(int $id): bool
     {
-        $this->db->query('DELETE FROM districts WHERE id = :id');
+        $this->db->query('DELETE FROM quan_huyen WHERE id = :id');
         $this->db->bind(':id', $id, PDO::PARAM_INT);
 
         return $this->db->execute();

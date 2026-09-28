@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OtpCode extends Model
 {
-    protected $table = 'otp_codes';
+    protected $table = 'ma_otp';
 
     const CREATED_AT = 'created_at';
 

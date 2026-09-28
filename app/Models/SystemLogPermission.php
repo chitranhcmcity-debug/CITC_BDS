@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SystemLogPermission extends Model
 {
-    protected $table = 'system_log_permissions';
+    protected $table = 'quyen_nhat_ky_he_thong';
 
     protected $primaryKey = ['role_id', 'log_type'];
 

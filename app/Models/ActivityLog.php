@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ActivityLog extends Model
 {
-    protected $table = 'activity_logs';
+    protected $table = 'nhat_ky_hoat_dong';
 
     const CREATED_AT = 'created_at';
 

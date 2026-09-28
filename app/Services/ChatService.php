@@ -68,7 +68,7 @@ class ChatService
 
         // Cập nhật thời gian tương tác cuối trên hội thoại
         $db = new Database;
-        $db->query('UPDATE chat_conversations SET updated_at = NOW() WHERE id = :id');
+        $db->query('UPDATE hoi_thoai SET updated_at = NOW() WHERE id = :id');
         $db->bind(':id', $conversationId);
         $db->execute();
 

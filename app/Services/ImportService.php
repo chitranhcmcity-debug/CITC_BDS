@@ -72,7 +72,7 @@ class ImportService
                     $pType = $row[2] ?? 'Tỉnh';
 
                     // Kiểm tra trùng
-                    $db->query('SELECT id FROM provinces WHERE code = :code');
+                    $db->query('SELECT id FROM tinh_thanh WHERE code = :code');
                     $db->bind(':code', $code);
                     if ($db->single()) {
                         $errors[] = "Dòng {$lineNum}: Mã tỉnh '{$code}' đã tồn tại.";
@@ -94,7 +94,7 @@ class ImportService
                     $dType = $row[3] ?? 'Quận';
 
                     // Kiểm tra tỉnh cha tồn tại
-                    $db->query('SELECT id FROM provinces WHERE code = :pcode');
+                    $db->query('SELECT id FROM tinh_thanh WHERE code = :pcode');
                     $db->bind(':pcode', $provinceCode);
                     if (! $db->single()) {
                         $errors[] = "Dòng {$lineNum}: Mã tỉnh cha '{$provinceCode}' không tồn tại.";
@@ -103,7 +103,7 @@ class ImportService
                     }
 
                     // Kiểm tra trùng
-                    $db->query('SELECT id FROM districts WHERE code = :code');
+                    $db->query('SELECT id FROM quan_huyen WHERE code = :code');
                     $db->bind(':code', $code);
                     if ($db->single()) {
                         $errors[] = "Dòng {$lineNum}: Mã quận/huyện '{$code}' đã tồn tại.";
@@ -126,7 +126,7 @@ class ImportService
                     $wType = $row[3] ?? 'Phường';
 
                     // Kiểm tra quận cha tồn tại
-                    $db->query('SELECT id FROM districts WHERE code = :dcode');
+                    $db->query('SELECT id FROM quan_huyen WHERE code = :dcode');
                     $db->bind(':dcode', $districtCode);
                     if (! $db->single()) {
                         $errors[] = "Dòng {$lineNum}: Mã quận cha '{$districtCode}' không tồn tại.";
@@ -135,7 +135,7 @@ class ImportService
                     }
 
                     // Kiểm tra trùng
-                    $db->query('SELECT id FROM wards WHERE code = :code');
+                    $db->query('SELECT id FROM phuong_xa WHERE code = :code');
                     $db->bind(':code', $code);
                     if ($db->single()) {
                         $errors[] = "Dòng {$lineNum}: Mã phường/xã '{$code}' đã tồn tại.";

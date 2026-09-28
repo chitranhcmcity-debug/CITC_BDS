@@ -240,7 +240,7 @@ Cấp VIP và lượt UP là hai dịch vụ độc lập. UP tin không biến 
 - Người dùng mua gói lượt UP trong Ví điện tử. Các gói mặc định gồm 60, 150, 500, 750 và 1.500 lượt.
 - Mỗi lần UP thành công trừ đúng 1 lượt trong `nguoi_dung.luot_up_tin`.
 - Chỉ tin thuộc người dùng và có trạng thái `xuat_ban` mới được UP.
-- Hệ thống cập nhật `du_an.ngay_lam_moi`, ghi một dòng vào `post_up_history`, tạo thông báo và làm mới cache dashboard.
+- Hệ thống cập nhật `du_an.ngay_lam_moi`, ghi một dòng vào `lich_su_up_tin`, tạo thông báo và làm mới cache dashboard.
 - Các bước trừ lượt, cập nhật tin và ghi lịch sử chạy trong transaction; nếu có lỗi thì giao dịch được rollback.
 - Tổng số lần UP không được cộng dồn thành điểm xếp hạng. Lần UP gần nhất mới là thời điểm làm mới hiện hành.
 

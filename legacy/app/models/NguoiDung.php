@@ -222,7 +222,7 @@ class NguoiDung extends Model
      */
     public function taoThongBao(int $userId, string $tieuDe, string $noiDung): bool
     {
-        $this->db->query("INSERT INTO notifications (user_id, type, title, content, is_read) 
+        $this->db->query("INSERT INTO thong_bao_nguoi_dung (user_id, type, title, content, is_read) 
                           VALUES (:uid, 'he_thong', :title, :content, 0)");
         $this->db->bind(':uid',     $userId);
         $this->db->bind(':title',   $tieuDe);
@@ -238,7 +238,7 @@ class NguoiDung extends Model
      */
     public function demThongBaoChuaDoc(int $userId): int
     {
-        $this->db->query("SELECT COUNT(*) AS so_luong FROM notifications WHERE user_id = :uid AND is_read = 0");
+        $this->db->query("SELECT COUNT(*) AS so_luong FROM thong_bao_nguoi_dung WHERE user_id = :uid AND is_read = 0");
         $this->db->bind(':uid', $userId);
         $row = $this->db->single();
         return (int)($row->so_luong ?? 0);
@@ -253,7 +253,7 @@ class NguoiDung extends Model
     public function layThongBao(int $userId): array
     {
         $this->db->query("SELECT id, user_id as ma_nguoi_dung, type, title as tieu_de, content as noi_dung, url, icon, is_read as da_doc, created_at as ngay_tao 
-                          FROM notifications 
+                          FROM thong_bao_nguoi_dung 
                           WHERE user_id = :uid 
                           ORDER BY created_at DESC 
                           LIMIT 10");
@@ -269,7 +269,7 @@ class NguoiDung extends Model
      */
     public function danhDauDaDoc(int $userId): bool
     {
-        $this->db->query("UPDATE notifications SET is_read = 1 WHERE user_id = :uid");
+        $this->db->query("UPDATE thong_bao_nguoi_dung SET is_read = 1 WHERE user_id = :uid");
         $this->db->bind(':uid', $userId);
         return $this->db->execute();
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * LoginRepository – Ghi và đọc lịch sử đăng nhập từ bảng login_history.
+ * LoginRepository – Ghi và đọc lịch sử đăng nhập từ bảng lich_su_dang_nhap.
  */
 class LoginRepository
 {
@@ -19,7 +19,7 @@ class LoginRepository
     public function record(array $data): bool
     {
         $this->db->query(
-            "INSERT INTO login_history
+            "INSERT INTO lich_su_dang_nhap
                 (user_id, email, ip_address, user_agent, device_type, os, browser,
                  location, status, remember_me, notes)
              VALUES
@@ -46,7 +46,7 @@ class LoginRepository
     public function findByUser(int $userId, int $limit = 20): array
     {
         $this->db->query(
-            "SELECT * FROM login_history
+            "SELECT * FROM lich_su_dang_nhap
              WHERE user_id = :uid
              ORDER BY created_at DESC
              LIMIT :lim"
@@ -62,7 +62,7 @@ class LoginRepository
     public function getLastSuccessfulIP(int $userId): ?string
     {
         $this->db->query(
-            "SELECT ip_address FROM login_history
+            "SELECT ip_address FROM lich_su_dang_nhap
              WHERE user_id = :uid AND status = 'success'
              ORDER BY created_at DESC
              LIMIT 1"
@@ -79,7 +79,7 @@ class LoginRepository
     {
         $this->db->query(
             "SELECT lh.*, nd.ten AS ten_nguoi_dung
-             FROM login_history lh
+             FROM lich_su_dang_nhap lh
              LEFT JOIN nguoi_dung nd ON lh.user_id = nd.id
              ORDER BY lh.created_at DESC
              LIMIT :lim OFFSET :off"

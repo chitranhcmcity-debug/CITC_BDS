@@ -85,7 +85,7 @@ return new class extends Migration
         });
 
         // Live Chat Conversations
-        Schema::create('live_chat_conversations', function (Blueprint $table) {
+        Schema::create('hoi_thoai_truc_tuyen', function (Blueprint $table) {
             $table->id();
             $table->string('guest_token', 64)->nullable()->index();
             $table->unsignedBigInteger('ma_nguoi_dung')->nullable()->index();
@@ -110,7 +110,7 @@ return new class extends Migration
         });
 
         // Live Chat Messages
-        Schema::create('live_chat_messages', function (Blueprint $table) {
+        Schema::create('tin_nhan_truc_tuyen', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('conversation_id');
             $table->enum('sender_type', ['guest', 'customer', 'staff', 'admin', 'system']);
@@ -129,7 +129,7 @@ return new class extends Migration
         });
 
         // OTP codes
-        Schema::create('otp_codes', function (Blueprint $table) {
+        Schema::create('ma_otp', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('otp_code', 64);
@@ -144,7 +144,7 @@ return new class extends Migration
         });
 
         // Token table (remember me, email verify, password reset)
-        Schema::create('user_tokens', function (Blueprint $table) {
+        Schema::create('ma_truy_cap_nguoi_dung', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('token', 255);
@@ -159,7 +159,7 @@ return new class extends Migration
         });
 
         // RBAC permissions
-        Schema::create('permissions', function (Blueprint $table) {
+        Schema::create('quyen_han', function (Blueprint $table) {
             $table->id();
             $table->string('name', 120);
             $table->string('code', 150)->unique();
@@ -172,7 +172,7 @@ return new class extends Migration
             $table->index(['module', 'action']);
         });
 
-        Schema::create('role_permissions', function (Blueprint $table) {
+        Schema::create('vai_tro_quyen_han', function (Blueprint $table) {
             $table->unsignedBigInteger('role_id');
             $table->unsignedBigInteger('permission_id');
             $table->dateTime('created_at')->useCurrent();
@@ -183,7 +183,7 @@ return new class extends Migration
             $table->index('permission_id');
         });
 
-        Schema::create('user_roles', function (Blueprint $table) {
+        Schema::create('vai_tro_nguoi_dung', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('role_id');
             $table->dateTime('created_at')->useCurrent();
@@ -260,13 +260,13 @@ return new class extends Migration
         Schema::dropIfExists('cache_locks');
         Schema::dropIfExists('cache');
         Schema::dropIfExists('sessions');
-        Schema::dropIfExists('user_roles');
-        Schema::dropIfExists('role_permissions');
-        Schema::dropIfExists('permissions');
-        Schema::dropIfExists('user_tokens');
-        Schema::dropIfExists('otp_codes');
-        Schema::dropIfExists('live_chat_messages');
-        Schema::dropIfExists('live_chat_conversations');
+        Schema::dropIfExists('vai_tro_nguoi_dung');
+        Schema::dropIfExists('vai_tro_quyen_han');
+        Schema::dropIfExists('quyen_han');
+        Schema::dropIfExists('ma_truy_cap_nguoi_dung');
+        Schema::dropIfExists('ma_otp');
+        Schema::dropIfExists('tin_nhan_truc_tuyen');
+        Schema::dropIfExists('hoi_thoai_truc_tuyen');
         Schema::dropIfExists('messages');
         Schema::dropIfExists('conversations');
         Schema::dropIfExists('goi_dich_vu');

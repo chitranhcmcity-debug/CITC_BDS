@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class LiveChat extends Model
 {
-    protected $table = 'live_chat_conversations';
+    protected $table = 'hoi_thoai_truc_tuyen';
 
     public $timestamps = false;
 
@@ -47,13 +47,13 @@ class LiveChat extends Model
 
         if ($userId) {
             $existing = DB::selectOne("
-                SELECT * FROM live_chat_conversations
+                SELECT * FROM hoi_thoai_truc_tuyen
                 WHERE ma_nguoi_dung = ? AND status <> 'closed'
                 ORDER BY id DESC LIMIT 1
             ", [$userId]);
         } else {
             $existing = DB::selectOne("
-                SELECT * FROM live_chat_conversations
+                SELECT * FROM hoi_thoai_truc_tuyen
                 WHERE guest_token = ? AND status <> 'closed'
                 ORDER BY id DESC LIMIT 1
             ", [$guestToken]);
@@ -63,7 +63,7 @@ class LiveChat extends Model
             return $existing;
         }
 
-        $id = DB::table('live_chat_conversations')->insertGetId([
+        $id = DB::table('hoi_thoai_truc_tuyen')->insertGetId([
             'guest_token' => $guestToken,
             'ma_nguoi_dung' => $userId ? (int) $userId : null,
             'customer_name' => $identity['name'] ?? null,
@@ -82,7 +82,7 @@ class LiveChat extends Model
     {
         $res = DB::selectOne('
             SELECT c.*, nd.ten AS staff_name
-            FROM live_chat_conversations c
+            FROM hoi_thoai_truc_tuyen c
             LEFT JOIN nguoi_dung nd ON c.assigned_staff_id = nd.id
             WHERE c.id = ?
         ', [$id]);
@@ -94,13 +94,13 @@ class LiveChat extends Model
     {
         if ($userId) {
             $res = DB::selectOne("
-                SELECT * FROM live_chat_conversations
+                SELECT * FROM hoi_thoai_truc_tuyen
                 WHERE ma_nguoi_dung = ? AND status <> 'closed'
                 ORDER BY id DESC LIMIT 1
             ", [$userId]);
         } else {
             $res = DB::selectOne("
-                SELECT * FROM live_chat_conversations
+                SELECT * FROM hoi_thoai_truc_tuyen
                 WHERE guest_token = ? AND status <> 'closed'
                 ORDER BY id DESC LIMIT 1
             ", [$guestToken]);
@@ -125,7 +125,7 @@ class LiveChat extends Model
     {
         DB::beginTransaction();
         try {
-            $msgId = DB::table('live_chat_messages')->insertGetId([
+            $msgId = DB::table('tin_nhan_truc_tuyen')->insertGetId([
                 'conversation_id' => $conversationId,
                 'sender_type' => $senderType,
                 'sender_id' => $senderId,
@@ -146,7 +146,7 @@ class LiveChat extends Model
                 $updateData['unread_admin'] = DB::raw('unread_admin + 1');
             }
 
-            DB::table('live_chat_conversations')->where('id', $conversationId)->update($updateData);
+            DB::table('hoi_thoai_truc_tuyen')->where('id', $conversationId)->update($updateData);
             DB::commit();
 
             return (int) $msgId;
@@ -160,7 +160,7 @@ class LiveChat extends Model
     public function getMessages(int $conversationId, int $afterId = 0): array
     {
         return DB::select('
-            SELECT * FROM live_chat_messages
+            SELECT * FROM tin_nhan_truc_tuyen
             WHERE conversation_id = ? AND id > ?
             ORDER BY id ASC
         ', [$conversationId, $afterId]);
@@ -169,7 +169,7 @@ class LiveChat extends Model
     public function listConversations(string $status = 'all'): array
     {
         $query = 'SELECT c.*, nd.ten AS staff_name
-                  FROM live_chat_conversations c
+                  FROM hoi_thoai_truc_tuyen c
                   LEFT JOIN nguoi_dung nd ON c.assigned_staff_id = nd.id';
 
         $params = [];
@@ -186,7 +186,7 @@ class LiveChat extends Model
     public function claimConversation(int $conversationId, int $staffId): bool
     {
         return DB::update("
-            UPDATE live_chat_conversations
+            UPDATE hoi_thoai_truc_tuyen
             SET assigned_staff_id = ?, status = 'open', updated_at = NOW()
             WHERE id = ?
         ", [$staffId, $conversationId]) >= 0;
@@ -195,7 +195,7 @@ class LiveChat extends Model
     public function closeConversation(int $conversationId): bool
     {
         return DB::update("
-            UPDATE live_chat_conversations
+            UPDATE hoi_thoai_truc_tuyen
             SET status = 'closed', closed_at = NOW(), updated_at = NOW()
             WHERE id = ?
         ", [$conversationId]) >= 0;
@@ -204,7 +204,7 @@ class LiveChat extends Model
     public function markReadByAdmin(int $conversationId): bool
     {
         return DB::update('
-            UPDATE live_chat_conversations
+            UPDATE hoi_thoai_truc_tuyen
             SET unread_admin = 0, updated_at = NOW()
             WHERE id = ?
         ', [$conversationId]) >= 0;
@@ -213,7 +213,7 @@ class LiveChat extends Model
     public function markReadByCustomer(int $conversationId): bool
     {
         return DB::update('
-            UPDATE live_chat_conversations
+            UPDATE hoi_thoai_truc_tuyen
             SET unread_customer = 0, updated_at = NOW()
             WHERE id = ?
         ', [$conversationId]) >= 0;
@@ -221,7 +221,7 @@ class LiveChat extends Model
 
     public function countWaitingForAdmin(): int
     {
-        $res = DB::selectOne("SELECT COUNT(*) as total FROM live_chat_conversations WHERE status = 'waiting'");
+        $res = DB::selectOne("SELECT COUNT(*) as total FROM hoi_thoai_truc_tuyen WHERE status = 'waiting'");
 
         return $res ? (int) ($res->total ?? 0) : 0;
     }
@@ -234,7 +234,7 @@ class LiveChat extends Model
                 SUM(CASE WHEN status = 'waiting' THEN 1 ELSE 0 END) as waiting,
                 SUM(CASE WHEN status = 'open' THEN 1 ELSE 0 END) as open,
                 SUM(CASE WHEN status = 'closed' THEN 1 ELSE 0 END) as closed
-            FROM live_chat_conversations
+            FROM hoi_thoai_truc_tuyen
         ");
 
         return [

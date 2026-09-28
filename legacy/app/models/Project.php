@@ -1,11 +1,11 @@
 <?php
 /**
- * Model Project – Ánh xạ tới bảng `projects` (Dự án bất động sản).
+ * Model Project – Ánh xạ tới bảng `du_an_dau_tu` (Dự án bất động sản).
  * Tuân thủ SOLID, Model Layer.
  */
 class Project extends Model
 {
-    protected string $table = 'projects';
+    protected string $table = 'du_an_dau_tu';
 
     public int $id = 0;
     public string $name = '';

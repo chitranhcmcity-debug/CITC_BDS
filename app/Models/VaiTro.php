@@ -36,7 +36,7 @@ class VaiTro extends Model
 
     public function permissions()
     {
-        return $this->belongsToMany(Permission::class, 'role_permissions', 'role_id', 'permission_id');
+        return $this->belongsToMany(Permission::class, 'vai_tro_quyen_han', 'role_id', 'permission_id');
     }
 
     public function logPermissions(): HasMany

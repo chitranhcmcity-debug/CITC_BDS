@@ -248,19 +248,19 @@ class NewsService
         $db = new Database;
 
         // Kiểm tra đã like chưa
-        $db->query('SELECT 1 FROM news_likes WHERE bai_viet_id = :nid AND nguoi_dung_id = :uid');
+        $db->query('SELECT 1 FROM luot_thich_tin_tuc WHERE bai_viet_id = :nid AND nguoi_dung_id = :uid');
         $db->bind(':nid', $newsId, PDO::PARAM_INT);
         $db->bind(':uid', $userId, PDO::PARAM_INT);
         $exists = (bool) $db->single();
 
         if ($exists) {
-            $db->query('DELETE FROM news_likes WHERE bai_viet_id = :nid AND nguoi_dung_id = :uid');
+            $db->query('DELETE FROM luot_thich_tin_tuc WHERE bai_viet_id = :nid AND nguoi_dung_id = :uid');
             $db->bind(':nid', $newsId, PDO::PARAM_INT);
             $db->bind(':uid', $userId, PDO::PARAM_INT);
             $db->execute();
             $liked = false;
         } else {
-            $db->query('INSERT IGNORE INTO news_likes (bai_viet_id, nguoi_dung_id) VALUES (:nid, :uid)');
+            $db->query('INSERT IGNORE INTO luot_thich_tin_tuc (bai_viet_id, nguoi_dung_id) VALUES (:nid, :uid)');
             $db->bind(':nid', $newsId, PDO::PARAM_INT);
             $db->bind(':uid', $userId, PDO::PARAM_INT);
             $db->execute();
@@ -268,7 +268,7 @@ class NewsService
         }
 
         // Đồng bộ counter
-        $db->query('SELECT COUNT(*) FROM news_likes WHERE bai_viet_id = :nid');
+        $db->query('SELECT COUNT(*) FROM luot_thich_tin_tuc WHERE bai_viet_id = :nid');
         $db->bind(':nid', $newsId, PDO::PARAM_INT);
         $count = (int) $db->single()->{'COUNT(*)'};
         $this->newsRepo->setLikeCount($newsId, $count);
@@ -282,7 +282,7 @@ class NewsService
     public function hasLiked(int $newsId, int $userId): bool
     {
         $db = new Database;
-        $db->query('SELECT 1 FROM news_likes WHERE bai_viet_id = :nid AND nguoi_dung_id = :uid');
+        $db->query('SELECT 1 FROM luot_thich_tin_tuc WHERE bai_viet_id = :nid AND nguoi_dung_id = :uid');
         $db->bind(':nid', $newsId, PDO::PARAM_INT);
         $db->bind(':uid', $userId, PDO::PARAM_INT);
 

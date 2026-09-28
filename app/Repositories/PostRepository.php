@@ -138,7 +138,7 @@ class PostRepository
 
     public function recordUp(int $id, int $uid): bool
     {
-        $this->db->query('INSERT INTO post_up_history(post_id,user_id) VALUES(:id,:uid)');
+        $this->db->query('INSERT INTO lich_su_up_tin(post_id,user_id) VALUES(:id,:uid)');
         $this->db->bind(':id', $id, PDO::PARAM_INT);
         $this->db->bind(':uid', $uid, PDO::PARAM_INT);
 

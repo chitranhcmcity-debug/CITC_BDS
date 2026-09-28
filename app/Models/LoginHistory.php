@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class LoginHistory extends Model
 {
-    protected $table = 'login_history';
+    protected $table = 'lich_su_dang_nhap';
 
     const CREATED_AT = 'created_at';
 

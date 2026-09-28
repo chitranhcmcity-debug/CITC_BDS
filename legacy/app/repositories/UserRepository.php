@@ -230,7 +230,7 @@ class UserRepository
     public function isFollowing(int $followerId, int $followedId): bool
     {
         $this->db->query(
-            "SELECT COUNT(*) AS cnt FROM follows
+            "SELECT COUNT(*) AS cnt FROM theo_doi
              WHERE follower_id = :fid AND followed_id = :uid"
         );
         $this->db->bind(':fid', $followerId);
@@ -242,7 +242,7 @@ class UserRepository
     public function follow(int $followerId, int $followedId): bool
     {
         $this->db->query(
-            "INSERT IGNORE INTO follows (follower_id, followed_id) VALUES (:fid, :uid)"
+            "INSERT IGNORE INTO theo_doi (follower_id, followed_id) VALUES (:fid, :uid)"
         );
         $this->db->bind(':fid', $followerId);
         $this->db->bind(':uid', $followedId);
@@ -260,7 +260,7 @@ class UserRepository
     public function unfollow(int $followerId, int $followedId): bool
     {
         $this->db->query(
-            "DELETE FROM follows WHERE follower_id = :fid AND followed_id = :uid"
+            "DELETE FROM theo_doi WHERE follower_id = :fid AND followed_id = :uid"
         );
         $this->db->bind(':fid', $followerId);
         $this->db->bind(':uid', $followedId);

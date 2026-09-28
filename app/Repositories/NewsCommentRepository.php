@@ -6,7 +6,7 @@ use App\Models\Database;
 use PDO;
 
 /**
- * NewsCommentRepository – Bình luận bài viết (bảng news_comments).
+ * NewsCommentRepository – Bình luận bài viết (bảng binh_luan_tin_tuc).
  *
  * Chiến lược bình luận:
  *  - 2 level: root comment + reply (cha_id != null)
@@ -34,7 +34,7 @@ class NewsCommentRepository
         $this->db->query(
             "SELECT c.id, c.cha_id, c.noi_dung, c.trang_thai, c.ngay_tao, c.ngay_cap_nhat,
                     n.id AS nguoi_dung_id, n.ten AS ten_nguoi_dung, n.anh_dai_dien, n.ma_vai_tro
-             FROM news_comments c
+             FROM binh_luan_tin_tuc c
              JOIN nguoi_dung n ON n.id = c.nguoi_dung_id
              WHERE c.bai_viet_id = :newsId AND c.trang_thai = 'hien'
              ORDER BY c.cha_id ASC, c.ngay_tao ASC
@@ -50,7 +50,7 @@ class NewsCommentRepository
     public function countByNews(int $newsId): int
     {
         $this->db->query(
-            "SELECT COUNT(*) FROM news_comments WHERE bai_viet_id = :newsId AND trang_thai = 'hien'"
+            "SELECT COUNT(*) FROM binh_luan_tin_tuc WHERE bai_viet_id = :newsId AND trang_thai = 'hien'"
         );
         $this->db->bind(':newsId', $newsId, PDO::PARAM_INT);
 
@@ -66,7 +66,7 @@ class NewsCommentRepository
     public function create(array $data): int
     {
         $this->db->query(
-            'INSERT INTO news_comments (bai_viet_id, nguoi_dung_id, noi_dung, cha_id)
+            'INSERT INTO binh_luan_tin_tuc (bai_viet_id, nguoi_dung_id, noi_dung, cha_id)
              VALUES (:bai_viet_id, :nguoi_dung_id, :noi_dung, :cha_id)'
         );
         $this->db->bind(':bai_viet_id', (int) $data['bai_viet_id'], PDO::PARAM_INT);
@@ -86,7 +86,7 @@ class NewsCommentRepository
     public function update(int $id, string $content, int $userId): bool
     {
         $this->db->query(
-            "UPDATE news_comments SET noi_dung = :noi_dung, ngay_cap_nhat = NOW()
+            "UPDATE binh_luan_tin_tuc SET noi_dung = :noi_dung, ngay_cap_nhat = NOW()
              WHERE id = :id AND nguoi_dung_id = :userId AND trang_thai = 'hien'"
         );
         $this->db->bind(':noi_dung', $content);
@@ -103,7 +103,7 @@ class NewsCommentRepository
     public function softDelete(int $id, int $userId, bool $isAdmin = false): bool
     {
         $whereExtra = $isAdmin ? '' : ' AND nguoi_dung_id = :userId';
-        $sql = "UPDATE news_comments SET noi_dung = '[Đã xóa]', ngay_cap_nhat = NOW()
+        $sql = "UPDATE binh_luan_tin_tuc SET noi_dung = '[Đã xóa]', ngay_cap_nhat = NOW()
                 WHERE id = :id {$whereExtra}";
         $this->db->query($sql);
         $this->db->bind(':id', $id, PDO::PARAM_INT);
@@ -119,7 +119,7 @@ class NewsCommentRepository
      */
     public function hide(int $id): bool
     {
-        $this->db->query("UPDATE news_comments SET trang_thai = 'an' WHERE id = :id");
+        $this->db->query("UPDATE binh_luan_tin_tuc SET trang_thai = 'an' WHERE id = :id");
         $this->db->bind(':id', $id, PDO::PARAM_INT);
 
         return $this->db->execute();
@@ -128,7 +128,7 @@ class NewsCommentRepository
     /** Admin hien lai comment da bi an. */
     public function unhide(int $id): bool
     {
-        $this->db->query("UPDATE news_comments SET trang_thai = 'hien' WHERE id = :id");
+        $this->db->query("UPDATE binh_luan_tin_tuc SET trang_thai = 'hien' WHERE id = :id");
         $this->db->bind(':id', $id, PDO::PARAM_INT);
 
         return $this->db->execute();
@@ -139,7 +139,7 @@ class NewsCommentRepository
      */
     public function findById(int $id): mixed
     {
-        $this->db->query('SELECT * FROM news_comments WHERE id = :id');
+        $this->db->query('SELECT * FROM binh_luan_tin_tuc WHERE id = :id');
         $this->db->bind(':id', $id, PDO::PARAM_INT);
 
         return $this->db->single();
@@ -154,7 +154,7 @@ class NewsCommentRepository
         $this->db->query(
             "SELECT c.*, b.tieu_de AS tieu_de_bai, b.duong_dan AS slug_bai,
                     n.ten AS ten_nguoi_dung
-             FROM news_comments c
+             FROM binh_luan_tin_tuc c
              JOIN bai_viet b ON b.id = c.bai_viet_id
              JOIN nguoi_dung n ON n.id = c.nguoi_dung_id
              {$where}
@@ -175,7 +175,7 @@ class NewsCommentRepository
      */
     public function delete(int $id): bool
     {
-        $this->db->query('DELETE FROM news_comments WHERE id = :id');
+        $this->db->query('DELETE FROM binh_luan_tin_tuc WHERE id = :id');
         $this->db->bind(':id', $id, PDO::PARAM_INT);
 
         return $this->db->execute();

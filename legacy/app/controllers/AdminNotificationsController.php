@@ -30,7 +30,7 @@ class AdminNotificationsController extends Controller
 
         // Đếm tổng số để phân trang
         $db = new Database();
-        $db->query("SELECT COUNT(*) as total FROM notifications");
+        $db->query("SELECT COUNT(*) as total FROM thong_bao_nguoi_dung");
         $totalRow = $db->single();
         $total = (int)($totalRow->total ?? 0);
         $totalPages = max(1, (int)ceil($total / $limit));

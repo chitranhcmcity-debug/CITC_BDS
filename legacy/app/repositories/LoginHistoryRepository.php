@@ -18,7 +18,7 @@ class LoginHistoryRepository
     public function record(array $data): bool
     {
         $this->db->query("
-            INSERT INTO login_history 
+            INSERT INTO lich_su_dang_nhap 
             (user_id, email, ip_address, browser, location, remember_me, notes, platform, 
              device, country, status, fail_reason, user_agent, device_type, os, created_at)
             VALUES 
@@ -50,7 +50,7 @@ class LoginHistoryRepository
     public function getHistory(int $userId, int $limit = 20, int $offset = 0): array
     {
         $this->db->query("
-            SELECT * FROM login_history 
+            SELECT * FROM lich_su_dang_nhap 
             WHERE user_id = :uid 
             ORDER BY created_at DESC 
             LIMIT :lim OFFSET :off
@@ -66,7 +66,7 @@ class LoginHistoryRepository
      */
     public function countHistory(int $userId): int
     {
-        $this->db->query("SELECT COUNT(*) AS total FROM login_history WHERE user_id = :uid");
+        $this->db->query("SELECT COUNT(*) AS total FROM lich_su_dang_nhap WHERE user_id = :uid");
         $this->db->bind(':uid', $userId, PDO::PARAM_INT);
         $res = $this->db->single();
         return $res ? (int)$res->total : 0;
@@ -78,7 +78,7 @@ class LoginHistoryRepository
     public function recordLogout(int $userId, string $ipAddress, string $userAgent): bool
     {
         $this->db->query("
-            UPDATE login_history 
+            UPDATE lich_su_dang_nhap 
             SET status = 'logout' 
             WHERE user_id = :uid AND ip_address = :ip AND user_agent = :agent AND status = 'success'
             ORDER BY created_at DESC LIMIT 1

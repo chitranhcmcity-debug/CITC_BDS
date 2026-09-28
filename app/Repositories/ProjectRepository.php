@@ -6,7 +6,7 @@ use App\Models\Database;
 use PDO;
 
 /**
- * ProjectRepository – Truy vấn CSDL cho bảng `projects` (Dự án dùng chung).
+ * ProjectRepository – Truy vấn CSDL cho bảng `du_an_dau_tu` (Dự án dùng chung).
  * Tuân thủ SOLID, Repository Pattern.
  */
 class ProjectRepository
@@ -20,7 +20,7 @@ class ProjectRepository
 
     public function getAll(string $search = ''): array
     {
-        $sql = 'SELECT * FROM projects';
+        $sql = 'SELECT * FROM du_an_dau_tu';
         if (! empty($search)) {
             $sql .= ' WHERE name LIKE :search OR investor LIKE :search OR address LIKE :search';
         }
@@ -36,7 +36,7 @@ class ProjectRepository
 
     public function findById(int $id): ?object
     {
-        $this->db->query('SELECT * FROM projects WHERE id = :id LIMIT 1');
+        $this->db->query('SELECT * FROM du_an_dau_tu WHERE id = :id LIMIT 1');
         $this->db->bind(':id', $id, PDO::PARAM_INT);
         $res = $this->db->single();
 
@@ -46,7 +46,7 @@ class ProjectRepository
     public function create(array $data): int
     {
         $this->db->query('
-            INSERT INTO projects (name, investor, address, google_map, logo, image, description, facilities, sort_order, status) 
+            INSERT INTO du_an_dau_tu (name, investor, address, google_map, logo, image, description, facilities, sort_order, status) 
             VALUES (:name, :investor, :address, :google_map, :logo, :image, :description, :facilities, :sort_order, :status)
         ');
         $this->db->bind(':name', $data['name']);
@@ -72,7 +72,7 @@ class ProjectRepository
     public function update(int $id, array $data): bool
     {
         $this->db->query('
-            UPDATE projects 
+            UPDATE du_an_dau_tu 
             SET name = :name, investor = :investor, address = :address, google_map = :google_map, 
                 logo = :logo, image = :image, description = :description, facilities = :facilities, 
                 sort_order = :sort_order, status = :status
@@ -95,7 +95,7 @@ class ProjectRepository
 
     public function delete(int $id): bool
     {
-        $this->db->query('DELETE FROM projects WHERE id = :id');
+        $this->db->query('DELETE FROM du_an_dau_tu WHERE id = :id');
         $this->db->bind(':id', $id, PDO::PARAM_INT);
 
         return $this->db->execute();
@@ -103,7 +103,7 @@ class ProjectRepository
 
     public function changeStatus(int $id, string $status): bool
     {
-        $this->db->query('UPDATE projects SET status = :status WHERE id = :id');
+        $this->db->query('UPDATE du_an_dau_tu SET status = :status WHERE id = :id');
         $this->db->bind(':status', $status);
         $this->db->bind(':id', $id, PDO::PARAM_INT);
 
@@ -112,7 +112,7 @@ class ProjectRepository
 
     public function updateSortOrder(int $id, int $sortOrder): bool
     {
-        $this->db->query('UPDATE projects SET sort_order = :sort_order WHERE id = :id');
+        $this->db->query('UPDATE du_an_dau_tu SET sort_order = :sort_order WHERE id = :id');
         $this->db->bind(':sort_order', $sortOrder, PDO::PARAM_INT);
         $this->db->bind(':id', $id, PDO::PARAM_INT);
 

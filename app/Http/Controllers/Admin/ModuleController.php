@@ -26,12 +26,12 @@ class ModuleController extends Controller
         'tin-tuc' => ['bai_viet', ['id', 'tieu_de', 'trang_thai', 'luot_xem', 'noi_bat', 'ngay_tao']],
         'contact' => ['khach_hang', ['id', 'ten', 'email', 'dien_thoai', 'trang_thai', 'nguoi_phu_trach', 'ngay_tao']],
         'wallet' => ['nap_tien', ['id', 'ma_nguoi_dung', 'so_tien', 'tong_cong', 'phuong_thuc', 'ma_giao_dich', 'trang_thai', 'ngay_tao']],
-        'live-chat' => ['live_chat_conversations', ['id', 'customer_name', 'customer_email', 'subject', 'status', 'priority', 'assigned_staff_id', 'last_message_at']],
+        'live-chat' => ['hoi_thoai_truc_tuyen', ['id', 'customer_name', 'customer_email', 'subject', 'status', 'priority', 'assigned_staff_id', 'last_message_at']],
         'nguoi-dung' => ['nguoi_dung', ['id', 'ten', 'email', 'dien_thoai', 'ma_vai_tro', 'loai_tai_khoan', 'so_du', 'trang_thai', 'ngay_tao']],
-        'bang-gia' => ['up_packages', ['id', 'name', 'price', 'up_count', 'bonus_up', 'valid_days', 'is_active', 'created_at']],
+        'bang-gia' => ['goi_up_tin', ['id', 'name', 'price', 'up_count', 'bonus_up', 'valid_days', 'is_active', 'created_at']],
         'cai-dat' => ['cai_dat', ['id', 'khoa_cai_dat', 'gia_tri_cai_dat']],
         'roles' => ['vai_tro', ['id', 'ten', 'slug', 'mo_ta', 'is_system']],
-        'system-log' => ['activity_logs', ['id', 'user_id', 'action', 'module', 'description', 'ip_address', 'created_at']],
+        'system-log' => ['nhat_ky_hoat_dong', ['id', 'user_id', 'action', 'module', 'description', 'ip_address', 'created_at']],
     ];
 
     public function show(Request $request, string $module)
@@ -77,7 +77,7 @@ class ModuleController extends Controller
             'Tin đăng' => DB::table('du_an')->count(),
             'Tin tức' => DB::table('bai_viet')->count(),
             'Yêu cầu tư vấn' => DB::table('khach_hang')->count(),
-            'Cuộc trò chuyện' => DB::table('live_chat_conversations')->count(),
+            'Cuộc trò chuyện' => DB::table('hoi_thoai_truc_tuyen')->count(),
             'Tổng tiền nạp' => (float) DB::table('nap_tien')->where('trang_thai', 'da_duyet')->sum('so_tien'),
         ];
 

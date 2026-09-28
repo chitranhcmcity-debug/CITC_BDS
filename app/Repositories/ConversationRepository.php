@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\Database;
 
 /**
- * ConversationRepository – Thực hiện các câu lệnh SQL tác động lên bảng `chat_conversations`.
+ * ConversationRepository – Thực hiện các câu lệnh SQL tác động lên bảng `hoi_thoai`.
  * Tuân thủ SOLID, Repository Pattern.
  */
 class ConversationRepository
@@ -23,7 +23,7 @@ class ConversationRepository
                                  cu.ten as customer_name,
                                  se.ten as seller_name,
                                  st.ten as staff_name
-                          FROM chat_conversations c
+                          FROM hoi_thoai c
                           LEFT JOIN nguoi_dung cu ON c.customer_id = cu.id
                           LEFT JOIN nguoi_dung se ON c.seller_id = se.id
                           LEFT JOIN nguoi_dung st ON c.staff_id = st.id
@@ -39,7 +39,7 @@ class ConversationRepository
      */
     public function findActive(string $type, ?int $customerId, ?string $guestToken, ?int $sellerId = null): ?stdClass
     {
-        $sql = "SELECT * FROM chat_conversations WHERE type = :type AND status <> 'closed'";
+        $sql = "SELECT * FROM hoi_thoai WHERE type = :type AND status <> 'closed'";
         $binds = [':type' => $type];
 
         if ($customerId !== null) {
@@ -72,7 +72,7 @@ class ConversationRepository
      */
     public function create(array $data): int
     {
-        $this->db->query('INSERT INTO chat_conversations (customer_id, customer_guest_token, seller_id, staff_id, type, status, title)
+        $this->db->query('INSERT INTO hoi_thoai (customer_id, customer_guest_token, seller_id, staff_id, type, status, title)
                           VALUES (:cust_id, :guest, :seller_id, :staff_id, :type, :status, :title)');
 
         $this->db->bind(':cust_id', $data['customer_id'] ?? null);
@@ -101,7 +101,7 @@ class ConversationRepository
                                  cu.ten as customer_name,
                                  se.ten as seller_name,
                                  st.ten as staff_name
-                          FROM chat_conversations c
+                          FROM hoi_thoai c
                           LEFT JOIN nguoi_dung cu ON c.customer_id = cu.id
                           LEFT JOIN nguoi_dung se ON c.seller_id = se.id
                           LEFT JOIN nguoi_dung st ON c.staff_id = st.id
@@ -134,7 +134,7 @@ class ConversationRepository
                        cu.ten as customer_name,
                        se.ten as seller_name,
                        st.ten as staff_name
-                FROM chat_conversations c
+                FROM hoi_thoai c
                 LEFT JOIN nguoi_dung cu ON c.customer_id = cu.id
                 LEFT JOIN nguoi_dung se ON c.seller_id = se.id
                 LEFT JOIN nguoi_dung st ON c.staff_id = st.id';
@@ -158,7 +158,7 @@ class ConversationRepository
      */
     public function updateStatus(int $id, string $status): bool
     {
-        $this->db->query('UPDATE chat_conversations SET status = :status WHERE id = :id');
+        $this->db->query('UPDATE hoi_thoai SET status = :status WHERE id = :id');
         $this->db->bind(':status', $status);
         $this->db->bind(':id', $id);
 
@@ -170,7 +170,7 @@ class ConversationRepository
      */
     public function transfer(int $id, int $staffId): bool
     {
-        $this->db->query("UPDATE chat_conversations SET staff_id = :staff, status = 'open' WHERE id = :id");
+        $this->db->query("UPDATE hoi_thoai SET staff_id = :staff, status = 'open' WHERE id = :id");
         $this->db->bind(':staff', $staffId);
         $this->db->bind(':id', $id);
 
@@ -182,7 +182,7 @@ class ConversationRepository
      */
     public function pin(int $id, bool $pin): bool
     {
-        $this->db->query('UPDATE chat_conversations SET is_pinned = :pin WHERE id = :id');
+        $this->db->query('UPDATE hoi_thoai SET is_pinned = :pin WHERE id = :id');
         $this->db->bind(':pin', $pin ? 1 : 0);
         $this->db->bind(':id', $id);
 

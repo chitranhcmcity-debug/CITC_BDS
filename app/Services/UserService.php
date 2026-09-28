@@ -258,14 +258,14 @@ class UserService
 
         // bai_viet.ma_nguoi_dung - KHÔNG có ON DELETE
         try {
-            $db->query('DELETE nc FROM news_comments nc INNER JOIN bai_viet bv ON bv.id = nc.bai_viet_id WHERE bv.ma_nguoi_dung = :uid');
+            $db->query('DELETE nc FROM binh_luan_tin_tuc nc INNER JOIN bai_viet bv ON bv.id = nc.bai_viet_id WHERE bv.ma_nguoi_dung = :uid');
             $db->bind(':uid', $id, PDO::PARAM_INT);
             $db->execute();
         } catch (Throwable) {
         }
 
         try {
-            $db->query('DELETE nl FROM news_likes nl INNER JOIN bai_viet bv ON bv.id = nl.bai_viet_id WHERE bv.ma_nguoi_dung = :uid');
+            $db->query('DELETE nl FROM luot_thich_tin_tuc nl INNER JOIN bai_viet bv ON bv.id = nl.bai_viet_id WHERE bv.ma_nguoi_dung = :uid');
             $db->bind(':uid', $id, PDO::PARAM_INT);
             $db->execute();
         } catch (Throwable) {
@@ -280,7 +280,7 @@ class UserService
 
         // news_comments
         try {
-            $db->query('DELETE FROM news_comments WHERE nguoi_dung_id = :uid');
+            $db->query('DELETE FROM binh_luan_tin_tuc WHERE nguoi_dung_id = :uid');
             $db->bind(':uid', $id, PDO::PARAM_INT);
             $db->execute();
         } catch (Throwable) {
@@ -288,7 +288,7 @@ class UserService
 
         // news_likes
         try {
-            $db->query('DELETE FROM news_likes WHERE nguoi_dung_id = :uid');
+            $db->query('DELETE FROM luot_thich_tin_tuc WHERE nguoi_dung_id = :uid');
             $db->bind(':uid', $id, PDO::PARAM_INT);
             $db->execute();
         } catch (Throwable) {
@@ -296,7 +296,7 @@ class UserService
 
         // follows
         try {
-            $db->query('DELETE FROM follows WHERE follower_id = :uid OR following_id = :uid2');
+            $db->query('DELETE FROM theo_doi WHERE follower_id = :uid OR following_id = :uid2');
             $db->bind(':uid', $id, PDO::PARAM_INT);
             $db->bind(':uid2', $id, PDO::PARAM_INT);
             $db->execute();
@@ -305,7 +305,7 @@ class UserService
 
         // user_tokens
         try {
-            $db->query('DELETE FROM user_tokens WHERE user_id = :uid');
+            $db->query('DELETE FROM ma_truy_cap_nguoi_dung WHERE user_id = :uid');
             $db->bind(':uid', $id, PDO::PARAM_INT);
             $db->execute();
         } catch (Throwable) {
@@ -313,7 +313,7 @@ class UserService
 
         // otp_codes
         try {
-            $db->query('DELETE FROM otp_codes WHERE user_id = :uid');
+            $db->query('DELETE FROM ma_otp WHERE user_id = :uid');
             $db->bind(':uid', $id, PDO::PARAM_INT);
             $db->execute();
         } catch (Throwable) {
@@ -321,7 +321,7 @@ class UserService
 
         // notifications
         try {
-            $db->query('DELETE FROM notifications WHERE user_id = :uid');
+            $db->query('DELETE FROM thong_bao_nguoi_dung WHERE user_id = :uid');
             $db->bind(':uid', $id, PDO::PARAM_INT);
             $db->execute();
         } catch (Throwable) {
@@ -329,7 +329,7 @@ class UserService
 
         // chat_messages
         try {
-            $db->query('DELETE FROM chat_messages WHERE sender_id = :uid');
+            $db->query('DELETE FROM tin_nhan WHERE sender_id = :uid');
             $db->bind(':uid', $id, PDO::PARAM_INT);
             $db->execute();
         } catch (Throwable) {
@@ -337,7 +337,7 @@ class UserService
 
         // live_chat_conversations
         try {
-            $db->query('UPDATE live_chat_conversations SET ma_nguoi_dung = NULL WHERE ma_nguoi_dung = :uid');
+            $db->query('UPDATE hoi_thoai_truc_tuyen SET ma_nguoi_dung = NULL WHERE ma_nguoi_dung = :uid');
             $db->bind(':uid', $id, PDO::PARAM_INT);
             $db->execute();
         } catch (Throwable) {

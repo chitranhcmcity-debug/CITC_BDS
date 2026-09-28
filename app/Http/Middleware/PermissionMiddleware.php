@@ -22,10 +22,10 @@ class PermissionMiddleware
         }
 
         // Check if role has the permission code
-        $hasPermission = DB::table('role_permissions')
-            ->join('permissions', 'permissions.id', '=', 'role_permissions.permission_id')
-            ->where('role_permissions.role_id', $user->ma_vai_tro)
-            ->where('permissions.code', $permission)
+        $hasPermission = DB::table('vai_tro_quyen_han')
+            ->join('quyen_han', 'quyen_han.id', '=', 'vai_tro_quyen_han.permission_id')
+            ->where('vai_tro_quyen_han.role_id', $user->ma_vai_tro)
+            ->where('quyen_han.code', $permission)
             ->exists();
 
         if (! $hasPermission) {

@@ -1,11 +1,11 @@
 <?php
 /**
- * Model TransactionType – Ánh xạ tới bảng `transaction_types` (Bán, Cho thuê...).
+ * Model TransactionType – Ánh xạ tới bảng `loai_giao_dich` (Bán, Cho thuê...).
  * Tuân thủ SOLID, Model Layer.
  */
 class TransactionType extends Model
 {
-    protected string $table = 'transaction_types';
+    protected string $table = 'loai_giao_dich';
 
     public int $id = 0;
     public string $name = '';

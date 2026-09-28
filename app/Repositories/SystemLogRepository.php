@@ -17,7 +17,7 @@ class SystemLogRepository
 
     public function insertActivity(array $d): bool
     {
-        $this->db->query('INSERT INTO activity_logs
+        $this->db->query('INSERT INTO nhat_ky_hoat_dong
           (user_id,action,module,target_type,target_id,description,metadata,ip_address,user_agent,created_at)
           VALUES (:actor,:action,:module,:target_type,:target_id,:description,:metadata,:ip,:agent,NOW())');
 
@@ -26,7 +26,7 @@ class SystemLogRepository
 
     public function insertAdmin(array $d): bool
     {
-        $this->db->query('INSERT INTO admin_logs
+        $this->db->query('INSERT INTO nhat_ky_quan_tri
           (admin_id,action,module,target_type,target_id,description,old_data,new_data,ip_address,user_agent,created_at)
           VALUES (:actor,:action,:module,:target_type,:target_id,:description,:old_data,:new_data,:ip,:agent,NOW())');
         $this->bindCommonValues($d, 'actor');
@@ -38,7 +38,7 @@ class SystemLogRepository
 
     public function insertLogin(array $d): bool
     {
-        $this->db->query('INSERT INTO login_history
+        $this->db->query('INSERT INTO lich_su_dang_nhap
           (user_id,email,ip_address,browser,platform,device,country,status,fail_reason,user_agent,created_at)
           VALUES (:user_id,:email,:ip,:browser,:platform,:device,:country,:status,:reason,:agent,NOW())');
         foreach ([':user_id' => 'user_id', ':email' => 'email', ':ip' => 'ip_address', ':browser' => 'browser', ':platform' => 'platform',
@@ -51,7 +51,7 @@ class SystemLogRepository
 
     public function hasSuccessfulLoginFromIp(int $userId, string $ip): bool
     {
-        $this->db->query("SELECT 1 FROM login_history WHERE user_id=:user AND ip_address=:ip AND status='success' LIMIT 1");
+        $this->db->query("SELECT 1 FROM lich_su_dang_nhap WHERE user_id=:user AND ip_address=:ip AND status='success' LIMIT 1");
         $this->db->bind(':user', $userId, PDO::PARAM_INT);
         $this->db->bind(':ip', $ip);
 
@@ -60,7 +60,7 @@ class SystemLogRepository
 
     public function insertError(array $d): bool
     {
-        $this->db->query('INSERT INTO error_logs
+        $this->db->query('INSERT INTO nhat_ky_loi
           (module,level,error_type,message,stack_trace,request_url,request_method,user_id,ip_address,context,created_at)
           VALUES (:module,:level,:error_type,:message,:trace,:url,:method,:user_id,:ip,:context,NOW())');
         foreach ([':module' => 'module', ':level' => 'level', ':error_type' => 'error_type', ':message' => 'message', ':trace' => 'stack_trace',
@@ -74,12 +74,12 @@ class SystemLogRepository
     public function dashboardStats(): array
     {
         $sql = "SELECT
-          (SELECT COUNT(*) FROM activity_logs WHERE created_at>=CURDATE()) activity_today,
-          (SELECT COUNT(*) FROM login_history WHERE created_at>=CURDATE()) login_today,
-          (SELECT COUNT(*) FROM admin_logs WHERE created_at>=CURDATE()) admin_today,
-          (SELECT COUNT(*) FROM error_logs WHERE created_at>=CURDATE()) error_today,
-          (SELECT COUNT(*) FROM login_history WHERE created_at>=CURDATE() AND status IN ('failed','blocked')) failed_today,
-          (SELECT COUNT(*) FROM error_logs WHERE resolved=0) unresolved_errors";
+          (SELECT COUNT(*) FROM nhat_ky_hoat_dong WHERE created_at>=CURDATE()) activity_today,
+          (SELECT COUNT(*) FROM lich_su_dang_nhap WHERE created_at>=CURDATE()) login_today,
+          (SELECT COUNT(*) FROM nhat_ky_quan_tri WHERE created_at>=CURDATE()) admin_today,
+          (SELECT COUNT(*) FROM nhat_ky_loi WHERE created_at>=CURDATE()) error_today,
+          (SELECT COUNT(*) FROM lich_su_dang_nhap WHERE created_at>=CURDATE() AND status IN ('failed','blocked')) failed_today,
+          (SELECT COUNT(*) FROM nhat_ky_loi WHERE resolved=0) unresolved_errors";
         $this->db->query($sql);
         $row = $this->db->single();
 
@@ -94,13 +94,13 @@ class SystemLogRepository
           SUM(failed_logins) failed_logins, SUM(errors) errors
           FROM (
             SELECT DATE(created_at) period, COUNT(*) activity,0 admin_actions,0 logins,0 failed_logins,0 errors
-              FROM activity_logs WHERE created_at>=DATE_SUB(CURDATE(),INTERVAL {$days} DAY) GROUP BY DATE(created_at)
+              FROM nhat_ky_hoat_dong WHERE created_at>=DATE_SUB(CURDATE(),INTERVAL {$days} DAY) GROUP BY DATE(created_at)
             UNION ALL
-            SELECT DATE(created_at),0,COUNT(*),0,0,0 FROM admin_logs WHERE created_at>=DATE_SUB(CURDATE(),INTERVAL {$days} DAY) GROUP BY DATE(created_at)
+            SELECT DATE(created_at),0,COUNT(*),0,0,0 FROM nhat_ky_quan_tri WHERE created_at>=DATE_SUB(CURDATE(),INTERVAL {$days} DAY) GROUP BY DATE(created_at)
             UNION ALL
-            SELECT DATE(created_at),0,0,COUNT(*),SUM(status IN ('failed','blocked')),0 FROM login_history WHERE created_at>=DATE_SUB(CURDATE(),INTERVAL {$days} DAY) GROUP BY DATE(created_at)
+            SELECT DATE(created_at),0,0,COUNT(*),SUM(status IN ('failed','blocked')),0 FROM lich_su_dang_nhap WHERE created_at>=DATE_SUB(CURDATE(),INTERVAL {$days} DAY) GROUP BY DATE(created_at)
             UNION ALL
-            SELECT DATE(created_at),0,0,0,0,COUNT(*) FROM error_logs WHERE created_at>=DATE_SUB(CURDATE(),INTERVAL {$days} DAY) GROUP BY DATE(created_at)
+            SELECT DATE(created_at),0,0,0,0,COUNT(*) FROM nhat_ky_loi WHERE created_at>=DATE_SUB(CURDATE(),INTERVAL {$days} DAY) GROUP BY DATE(created_at)
           ) x GROUP BY period ORDER BY period");
 
         return $this->db->resultSet();
@@ -143,7 +143,7 @@ class SystemLogRepository
 
     public function resolveError(int $id, int $adminId, bool $resolved): bool
     {
-        $this->db->query('UPDATE error_logs SET resolved=:resolved,resolved_by=:admin,resolved_at='.($resolved ? 'NOW()' : 'NULL').' WHERE id=:id');
+        $this->db->query('UPDATE nhat_ky_loi SET resolved=:resolved,resolved_by=:admin,resolved_at='.($resolved ? 'NOW()' : 'NULL').' WHERE id=:id');
         $this->db->bind(':resolved', $resolved ? 1 : 0, PDO::PARAM_INT);
         $this->db->bind(':admin', $resolved ? $adminId : null);
         $this->db->bind(':id', $id, PDO::PARAM_INT);
@@ -177,7 +177,7 @@ class SystemLogRepository
 
     public function permissionsForRole(int $roleId): array
     {
-        $this->db->query('SELECT log_type,can_view,can_export,can_manage FROM system_log_permissions WHERE role_id=:role');
+        $this->db->query('SELECT log_type,can_view,can_export,can_manage FROM quyen_nhat_ky_he_thong WHERE role_id=:role');
         $this->db->bind(':role', $roleId, PDO::PARAM_INT);
         $result = [];
         foreach ($this->db->resultSet() as $row) {
@@ -244,10 +244,10 @@ class SystemLogRepository
     private function definitions(): array
     {
         return [
-            'activity' => ['table' => 'activity_logs', 'actor' => 'user_id'],
-            'admin' => ['table' => 'admin_logs', 'actor' => 'admin_id'],
-            'login' => ['table' => 'login_history', 'actor' => 'user_id'],
-            'error' => ['table' => 'error_logs', 'actor' => 'user_id'],
+            'activity' => ['table' => 'nhat_ky_hoat_dong', 'actor' => 'user_id'],
+            'admin' => ['table' => 'nhat_ky_quan_tri', 'actor' => 'admin_id'],
+            'login' => ['table' => 'lich_su_dang_nhap', 'actor' => 'user_id'],
+            'error' => ['table' => 'nhat_ky_loi', 'actor' => 'user_id'],
         ];
     }
 

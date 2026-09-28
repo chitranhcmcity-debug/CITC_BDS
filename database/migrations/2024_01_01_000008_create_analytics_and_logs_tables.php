@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         // Post Analytics
-        Schema::create('post_analytics', function (Blueprint $table) {
+        Schema::create('thong_ke_bai_dang', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('post_id');
             $table->unsignedBigInteger('user_id')->nullable()->comment('Owner of the listing');
@@ -38,7 +38,7 @@ return new class extends Migration
         });
 
         // Activity Logs
-        Schema::create('activity_logs', function (Blueprint $table) {
+        Schema::create('nhat_ky_hoat_dong', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('action', 100);
@@ -60,7 +60,7 @@ return new class extends Migration
         });
 
         // Admin Logs
-        Schema::create('admin_logs', function (Blueprint $table) {
+        Schema::create('nhat_ky_quan_tri', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('admin_id')->nullable();
             $table->string('action', 100);
@@ -83,7 +83,7 @@ return new class extends Migration
         });
 
         // Login History
-        Schema::create('login_history', function (Blueprint $table) {
+        Schema::create('lich_su_dang_nhap', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('email', 190)->nullable();
@@ -105,7 +105,7 @@ return new class extends Migration
         });
 
         // Error Logs
-        Schema::create('error_logs', function (Blueprint $table) {
+        Schema::create('nhat_ky_loi', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('module', 80)->default('system');
             $table->enum('level', ['info', 'warning', 'error', 'critical'])->default('error');
@@ -131,7 +131,7 @@ return new class extends Migration
         });
 
         // System Log Permissions
-        Schema::create('system_log_permissions', function (Blueprint $table) {
+        Schema::create('quyen_nhat_ky_he_thong', function (Blueprint $table) {
             $table->unsignedBigInteger('role_id');
             $table->enum('log_type', ['activity', 'admin', 'login', 'error']);
             $table->boolean('can_view')->default(false);
@@ -143,7 +143,7 @@ return new class extends Migration
         });
 
         // Seed log permissions for Admin
-        DB::table('system_log_permissions')->insert([
+        DB::table('quyen_nhat_ky_he_thong')->insert([
             ['role_id' => 1, 'log_type' => 'activity', 'can_view' => 1, 'can_export' => 1, 'can_manage' => 1],
             ['role_id' => 1, 'log_type' => 'admin', 'can_view' => 1, 'can_export' => 1, 'can_manage' => 1],
             ['role_id' => 1, 'log_type' => 'login', 'can_view' => 1, 'can_export' => 1, 'can_manage' => 1],
@@ -153,11 +153,11 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('system_log_permissions');
-        Schema::dropIfExists('error_logs');
-        Schema::dropIfExists('login_history');
-        Schema::dropIfExists('admin_logs');
-        Schema::dropIfExists('activity_logs');
-        Schema::dropIfExists('post_analytics');
+        Schema::dropIfExists('quyen_nhat_ky_he_thong');
+        Schema::dropIfExists('nhat_ky_loi');
+        Schema::dropIfExists('lich_su_dang_nhap');
+        Schema::dropIfExists('nhat_ky_quan_tri');
+        Schema::dropIfExists('nhat_ky_hoat_dong');
+        Schema::dropIfExists('thong_ke_bai_dang');
     }
 };

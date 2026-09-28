@@ -1,6 +1,6 @@
 <?php
 /**
- * MessageRepository – Thực hiện các câu lệnh SQL tác động lên bảng `chat_messages`.
+ * MessageRepository – Thực hiện các câu lệnh SQL tác động lên bảng `tin_nhan`.
  * Tuân thủ SOLID, Repository Pattern.
  */
 class MessageRepository
@@ -14,7 +14,7 @@ class MessageRepository
 
     public function findById(int $id): ?stdClass
     {
-        $this->db->query("SELECT * FROM chat_messages WHERE id = :id");
+        $this->db->query("SELECT * FROM tin_nhan WHERE id = :id");
         $this->db->bind(':id', $id);
         $row = $this->db->single();
         return $row ?: null;
@@ -22,7 +22,7 @@ class MessageRepository
 
     public function insert(array $data): int
     {
-        $this->db->query("INSERT INTO chat_messages (conversation_id, sender_id, sender_name, message, message_type, attachment, is_read)
+        $this->db->query("INSERT INTO tin_nhan (conversation_id, sender_id, sender_name, message, message_type, attachment, is_read)
                           VALUES (:conv_id, :sender_id, :sender_name, :message, :type, :attach, :read)");
         
         $this->db->bind(':conv_id',     $data['conversation_id']);
@@ -45,7 +45,7 @@ class MessageRepository
      */
     public function getHistory(int $conversationId, int $limit = 50, int $offset = 0): array
     {
-        $this->db->query("SELECT * FROM chat_messages 
+        $this->db->query("SELECT * FROM tin_nhan 
                           WHERE conversation_id = :conv_id
                           ORDER BY id ASC 
                           LIMIT :limit OFFSET :offset");
@@ -61,14 +61,14 @@ class MessageRepository
     public function markAsRead(int $conversationId, ?int $readerId): bool
     {
         if ($readerId !== null) {
-            $this->db->query("UPDATE chat_messages 
+            $this->db->query("UPDATE tin_nhan 
                               SET is_read = 1 
                               WHERE conversation_id = :conv_id AND (sender_id <> :reader_id OR sender_id IS NULL) AND is_read = 0");
             $this->db->bind(':conv_id', $conversationId);
             $this->db->bind(':reader_id', $readerId);
         } else {
             // Guest reader
-            $this->db->query("UPDATE chat_messages 
+            $this->db->query("UPDATE tin_nhan 
                               SET is_read = 1 
                               WHERE conversation_id = :conv_id AND sender_id IS NOT NULL AND is_read = 0");
             $this->db->bind(':conv_id', $conversationId);
@@ -81,7 +81,7 @@ class MessageRepository
      */
     public function revoke(int $id, int $senderId): bool
     {
-        $this->db->query("UPDATE chat_messages 
+        $this->db->query("UPDATE tin_nhan 
                           SET message = 'Tin nhắn đã bị thu hồi.', message_type = 'system', attachment = NULL 
                           WHERE id = :id AND sender_id = :sender");
         $this->db->bind(':id', $id);
@@ -94,7 +94,7 @@ class MessageRepository
      */
     public function delete(int $id, int $senderId): bool
     {
-        $this->db->query("DELETE FROM chat_messages WHERE id = :id AND sender_id = :sender");
+        $this->db->query("DELETE FROM tin_nhan WHERE id = :id AND sender_id = :sender");
         $this->db->bind(':id', $id);
         $this->db->bind(':sender', $senderId);
         return $this->db->execute();
@@ -105,7 +105,7 @@ class MessageRepository
      */
     public function countAll(): int
     {
-        $this->db->query("SELECT COUNT(*) as total FROM chat_messages");
+        $this->db->query("SELECT COUNT(*) as total FROM tin_nhan");
         $row = $this->db->single();
         return (int)($row->total ?? 0);
     }
