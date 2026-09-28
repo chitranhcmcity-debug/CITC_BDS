@@ -26,7 +26,10 @@ COPY --from=vendor /app /var/www/html
 RUN mkdir -p legacy/storage legacy/logs public/uploads legacy/public/uploads \
     && chown -R www-data:www-data legacy/storage legacy/logs public/uploads legacy/public/uploads storage
 
-# Railway cấp cổng qua biến PORT.
-CMD sed -i "s/^Listen .*/Listen ${PORT:-80}/" /etc/apache2/ports.conf \
+# Railway cấp cổng qua biến PORT. mod_php chỉ chạy với mpm_prefork: tắt các MPM khác
+# ngay lúc khởi động để tránh lỗi "More than one MPM loaded".
+CMD rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.* \
+    && a2enmod -q mpm_prefork \
+    && sed -i "s/^Listen .*/Listen ${PORT:-80}/" /etc/apache2/ports.conf \
     && sed -i "s/<VirtualHost \*:[0-9]*>/<VirtualHost *:${PORT:-80}>/" /etc/apache2/sites-available/000-default.conf \
     && apache2-foreground
