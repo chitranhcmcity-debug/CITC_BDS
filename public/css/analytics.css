@@ -1,0 +1,19 @@
+.analytics-shell { --analytics-primary:#0d6efd; --analytics-ink:#172033; }
+.analytics-header { background:linear-gradient(135deg,#172554,#0d6efd); color:#fff; border-radius:18px; overflow:hidden; }
+.analytics-filter { background:#fff; border:1px solid #e9edf4; border-radius:14px; }
+.analytics-card { border:0; border-radius:14px; box-shadow:0 6px 22px rgba(30,41,59,.07); height:100%; }
+.analytics-card .metric-icon { width:42px; height:42px; display:grid; place-items:center; border-radius:12px; font-size:1.1rem; }
+.analytics-value { color:var(--analytics-ink); font-size:1.6rem; font-weight:800; line-height:1; }
+.analytics-label { color:#6b7280; font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; }
+.analytics-chart { position:relative; min-height:310px; }
+.analytics-chart canvas { max-height:310px; }
+.analytics-post-thumb { width:54px; height:42px; border-radius:8px; object-fit:cover; background:#eef2f7; }
+.analytics-delta.is-up { color:#15803d; }
+.analytics-delta.is-down { color:#dc2626; }
+.analytics-best { border-left:4px solid #0d6efd; }
+@media (max-width:767.98px) {
+  .analytics-header { border-radius:12px; }
+  .analytics-chart { min-height:250px; }
+  .analytics-chart canvas { max-height:250px; }
+  .analytics-value { font-size:1.35rem; }
+}

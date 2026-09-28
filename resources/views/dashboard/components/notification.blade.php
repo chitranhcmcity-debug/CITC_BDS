@@ -1,0 +1,4 @@
+<div class="card border-0 shadow-sm h-100" id="dashboard-notifications"><div class="card-body"><div class="d-flex justify-content-between mb-3"><h2 class="h6 fw-bold mb-0">Thông báo mới</h2><form id="dashboard-read-form" action="<?= URL_ROOT ?>/nguoi-dung/markNotificationsRead" method="POST"><?= Csrf::field() ?><button class="btn btn-link btn-sm p-0">Đánh dấu đã đọc</button></form></div><div class="dashboard-list">
+<?php if(!$d['notifications']): ?><p class="text-muted text-center py-3">Chưa có thông báo.</p><?php endif; ?>
+<?php foreach($d['notifications'] as $item): ?><article class="dashboard-list-item <?= !$item['read']?'is-unread':'' ?>"><span class="list-icon"><i class="fa-solid fa-bell"></i></span><div><h3><?= htmlspecialchars($item['title'],ENT_QUOTES,'UTF-8') ?></h3><p><?= htmlspecialchars($item['content'],ENT_QUOTES,'UTF-8') ?></p><time><?= date('d/m/Y H:i',strtotime($item['created_at'])) ?></time></div></article><?php endforeach; ?>
+</div></div></div>

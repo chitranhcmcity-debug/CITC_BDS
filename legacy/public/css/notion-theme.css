@@ -1,0 +1,364 @@
+/* Notion Theme for Bootstrap 5 */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --bs-primary: #5645d4;
+  --bs-primary-rgb: 86, 69, 212;
+  --bs-danger: #e03131;
+  --bs-success: #1aae39;
+  --bs-warning: #dd5b00;
+  --bs-info: #2a9d99;
+  --bs-body-bg: #ffffff;
+  --bs-body-color: #1a1a1a;
+  --bs-font-sans-serif: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  
+  --notion-navy: #0a1530;
+  --notion-surface: #f6f5f4;
+  --notion-hairline: #e5e3df;
+  --notion-hairline-strong: #c8c4be;
+  --notion-text-charcoal: #37352f;
+  --notion-text-slate: #5d5b54;
+  --notion-text-steel: #787671;
+}
+
+body {
+  font-family: var(--bs-font-sans-serif);
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
+  line-height: 1.55;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-weight: 600;
+  color: var(--bs-body-color);
+}
+
+/* Typography Overrides */
+h1, .display-3 {
+    letter-spacing: -1px;
+}
+
+/* Buttons */
+.btn {
+  font-weight: 500;
+  border-radius: 8px !important;
+  padding: 10px 18px;
+  box-shadow: none !important;
+  transition: all 0.2s ease;
+}
+
+.btn-sm {
+  padding: 8px 12px;
+}
+
+.btn-primary {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+  color: #fff;
+}
+.btn-primary:hover {
+  background-color: #4534b3;
+  border-color: #4534b3;
+}
+
+.btn-danger {
+  background-color: var(--bs-danger);
+  border-color: var(--bs-danger);
+}
+
+.btn-outline-dark {
+    border: 1px solid var(--notion-hairline-strong);
+    color: var(--bs-body-color);
+}
+.btn-outline-dark:hover {
+    background-color: var(--notion-surface);
+    color: var(--bs-body-color);
+}
+
+/* Cards */
+.card {
+  border-radius: 12px !important;
+  border: 1px solid var(--notion-hairline) !important;
+  box-shadow: none !important;
+  background-color: var(--bs-body-bg);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: rgba(15, 15, 15, 0.08) 0px 4px 12px 0px !important;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-img-top, .card-img {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+/* Homepage banner */
+.hero-home {
+    min-height: 82vh !important;
+    align-items: flex-start !important;
+    padding: 2.6rem 0 2rem;
+}
+
+.hero-home .carousel,
+.hero-home .carousel-inner,
+.hero-home .carousel-item {
+    min-height: 100%;
+}
+
+.hero-home .search-box {
+    max-width: 980px;
+}
+
+.hero-home .display-3 {
+    max-width: 900px;
+    color: #fff !important;
+    font-size: clamp(2.45rem, 4.8vw, 4.3rem);
+    font-weight: 900 !important;
+    line-height: 1.04;
+    letter-spacing: -0.04em;
+    text-shadow: 0 5px 28px rgba(0, 0, 0, 0.55);
+}
+
+.hero-home .lead {
+    max-width: 820px;
+    color: rgba(255, 255, 255, 0.92) !important;
+    text-shadow: 0 3px 16px rgba(0, 0, 0, 0.45);
+}
+
+@media (max-width: 991.98px) {
+    .hero-home {
+        min-height: 82vh !important;
+        padding: 2.4rem 0 2rem;
+    }
+
+    .hero-home .display-3 {
+        font-size: clamp(2rem, 7vw, 3rem);
+    }
+
+    .hero-home .lead {
+        font-size: 1rem;
+        margin-bottom: 1.75rem !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .hero-home {
+        min-height: auto !important;
+        padding: 2rem 0 1.8rem;
+    }
+
+    .hero-home .search-box {
+        padding: 0.9rem !important;
+    }
+
+    .hero-home .hero-stat {
+        min-width: calc(50% - 0.5rem);
+        flex: 1 1 calc(50% - 0.5rem);
+    }
+}
+
+/* Real-estate product cards */
+.property-card,
+.latest-card,
+.project-card {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    cursor: pointer;
+    will-change: transform;
+    transition:
+        transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.32s ease,
+        border-color 0.32s ease !important;
+}
+
+.property-card::after,
+.latest-card::after,
+.project-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.34), transparent 70%);
+    transform: translateX(-130%);
+    transition: transform 0.58s ease;
+}
+
+.property-card:hover,
+.property-card:focus-within,
+.latest-card:hover,
+.latest-card:focus-within,
+.project-card:hover,
+.project-card:focus-within {
+    transform: translateY(-9px) !important;
+    border-color: rgba(220, 53, 69, 0.28) !important;
+    box-shadow:
+        0 22px 52px rgba(15, 23, 42, 0.16),
+        0 8px 18px rgba(220, 53, 69, 0.08) !important;
+}
+
+.property-card:hover::after,
+.property-card:focus-within::after,
+.latest-card:hover::after,
+.latest-card:focus-within::after,
+.project-card:hover::after,
+.project-card:focus-within::after {
+    transform: translateX(130%);
+}
+
+.property-card img,
+.latest-card img,
+.project-card img {
+    transform-origin: center;
+    transition: transform 0.42s ease, filter 0.42s ease;
+}
+
+.property-card:hover img,
+.property-card:focus-within img,
+.latest-card:hover img,
+.latest-card:focus-within img,
+.project-card:hover img,
+.project-card:focus-within img {
+    transform: scale(1.06);
+    filter: saturate(1.12) contrast(1.04);
+}
+
+.property-card:hover img.rounded-circle,
+.property-card:focus-within img.rounded-circle,
+.latest-card:hover img.rounded-circle,
+.latest-card:focus-within img.rounded-circle,
+.project-card:hover img.rounded-circle,
+.project-card:focus-within img.rounded-circle {
+    transform: none;
+    filter: none;
+}
+
+.property-card .vip-badge,
+.latest-card .vip-badge,
+.project-card .vip-badge {
+    transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.property-card:hover .vip-badge,
+.property-card:focus-within .vip-badge,
+.latest-card:hover .vip-badge,
+.latest-card:focus-within .vip-badge,
+.project-card:hover .vip-badge,
+.project-card:focus-within .vip-badge {
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 8px 18px rgba(245, 158, 11, 0.26);
+}
+
+.listing-card {
+    border-radius: 14px !important;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+.listing-card__media {
+    overflow: hidden;
+    min-height: 220px;
+    background: #f1f5f9;
+}
+
+.listing-card__image {
+    min-height: 220px;
+    height: 100%;
+}
+
+.listing-card .card-body {
+    min-height: 220px;
+}
+
+@media (max-width: 767.98px) {
+    .listing-card__media,
+    .listing-card__image,
+    .listing-card .card-body {
+        min-height: auto;
+    }
+
+    .listing-card__image {
+        height: 220px !important;
+    }
+}
+
+/* Inputs and Forms */
+.form-control, .form-select, .input-group-text {
+  border-radius: 8px !important;
+  border: 1px solid var(--notion-hairline-strong) !important;
+  min-height: 44px;
+  color: var(--bs-body-color);
+}
+.input-group-text {
+    background-color: var(--notion-surface) !important;
+    border-right: none !important;
+}
+.input-group .form-control {
+    border-left: none !important;
+}
+.form-select {
+    border-left: 1px solid var(--notion-hairline-strong) !important;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--bs-primary) !important;
+  box-shadow: 0 0 0 1px var(--bs-primary) !important;
+}
+
+/* Badges */
+.badge {
+  border-radius: 4px !important;
+  padding: 4px 10px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.vip-badge {
+  background-color: #f5d75e !important;
+  color: #37352f !important;
+}
+
+/* Layout Utilities */
+.bg-light {
+  background-color: var(--notion-surface) !important;
+}
+
+.bg-dark {
+  background-color: var(--notion-navy) !important;
+}
+
+.text-muted {
+  color: var(--notion-text-slate) !important;
+}
+
+.text-primary {
+  color: var(--bs-primary) !important;
+}
+
+.border {
+    border-color: var(--notion-hairline) !important;
+}
+
+/* Navbar and Footer */
+.navbar {
+    border-bottom: 1px solid var(--notion-hairline);
+    background-color: var(--bs-body-bg) !important;
+}
+.nav-link {
+    color: var(--notion-text-slate) !important;
+    font-weight: 500;
+}
+.nav-link:hover {
+    color: var(--bs-body-color) !important;
+}
+
+footer {
+    border-top: 1px solid var(--notion-hairline);
+    background-color: var(--notion-navy) !important;
+}

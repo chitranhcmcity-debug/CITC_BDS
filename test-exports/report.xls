@@ -1,0 +1,25 @@
+﻿"TIMNHADAT.SITE - BÁO CÁO QUẢN TRỊ"
+"Người xuất",Admin
+"Thời gian","13/07/2026 00:30:02"
+Khoảng,"2026-06-14 - 2026-07-13"
+
+"Chỉ số","Giá trị"
+total_users,99
+new_users,0
+active_users,99
+locked_users,
+total_posts,2075
+new_posts,0
+vip_posts,894
+pending_posts,164
+rejected_posts,0
+expired_posts,0
+views,5231008
+transactions,21
+transaction_value,3160000
+success_tx,3
+failed_tx,7
+revenue,2100000
+calls,0
+chats,0
+saves,4

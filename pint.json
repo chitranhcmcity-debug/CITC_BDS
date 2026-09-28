@@ -1,0 +1,7 @@
+{
+    "exclude": [
+        "CITC_BDS_old",
+        "legacy",
+        "vendor"
+    ]
+}

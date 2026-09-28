@@ -1,0 +1,14 @@
+HTTP/1.1 200 OK
+Date: Sun, 12 Jul 2026 17:30:03 GMT
+Server: Apache/2.4.66 (Win64) OpenSSL/3.0.18 PHP/8.3.30
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+Referrer-Policy: strict-origin-when-cross-origin
+X-Powered-By: PHP/8.3.30
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Content-Disposition: attachment; filename=BaoCaoGiaoDich_20260713_003003.csv
+Transfer-Encoding: chunked
+Content-Type: text/csv; charset=utf-8
+

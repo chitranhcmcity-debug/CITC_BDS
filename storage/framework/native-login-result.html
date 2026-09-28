@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - TimNhaDat.site</title>
+    <!-- Favicon -->
+    <link rel="icon" href="http://localhost/public/images/favicon.png?v=2" type="image/png">
+    
+    <!-- Fonts and Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AdminLTE v4 CSS -->
+    <link rel="stylesheet" href="http://localhost/public/css/adminlte.min.css">
+    <style>
+        /* Custom tweaks to match AdminLTE and preserve look-and-feel */
+        .brand-link {
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 0.9rem 1rem !important;
+        }
+        .nav-link.active {
+            background: linear-gradient(135deg, #0dbfaa, #077c6e) !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 14px rgba(13, 191, 170, 0.35) !important;
+            font-weight: 600;
+        }
+        .admin-dialog-card { border-radius: 20px; overflow: hidden; }
+        .admin-dialog-width { max-width: 480px; }
+        .admin-dialog-icon { width: 74px; height: 74px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.85rem; }
+        .admin-dialog-icon.is-danger { color: #dc3545; background: #fff0f1; }
+        .admin-dialog-icon.is-warning { color: #b77900; background: #fff7df; }
+        .admin-dialog-icon.is-success { color: #198754; background: #eaf8f1; }
+        .admin-dialog-icon.is-info { color: #0d6efd; background: #edf5ff; }
+        .admin-dialog-card .btn { min-width: 118px; border-radius: 10px; padding-top: .65rem; padding-bottom: .65rem; }
+        .admin-dialog-input { border-radius: 10px; resize: vertical; }
+
+        /* Sidebar Polish - Compact spacing */
+        .sidebar-menu .nav-link {
+            padding: 0.45rem 0.85rem;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border-radius: 6px;
+            margin: 0.1rem 0.6rem;
+            width: auto;
+            position: relative;
+        }
+        .sidebar-menu .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 20%;
+            height: 60%;
+            width: 4px;
+            background-color: #ffffff;
+            border-radius: 0 4px 4px 0;
+        }
+        .sidebar-menu .nav-link:hover:not(.active) {
+            background-color: rgba(255, 255, 255, 0.06);
+            color: #0dbfaa !important;
+            transform: translateX(6px);
+        }
+        .sidebar-menu .nav-link:hover .nav-icon {
+            transform: scale(1.15) rotate(6deg);
+        }
+        .sidebar-menu .nav-icon {
+            font-size: 1.1rem;
+            width: 28px;
+            text-align: center;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        .sidebar-menu .nav-header {
+            font-size: 0.72rem !important;
+            color: #8da2bb !important;
+            margin-top: 1rem !important;
+            margin-bottom: 0.2rem !important;
+            letter-spacing: 0.12em;
+            padding-left: 1.25rem !important;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sidebar-menu .nav-header::after {
+            content: '';
+            flex-grow: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.06);
+            margin-right: 1.25rem;
+        }
+
+        /* Custom sidebar scrollbar */
+        .sidebar-wrapper::-webkit-scrollbar {
+            width: 5px;
+        }
+        .sidebar-wrapper::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .sidebar-wrapper::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+        }
+        .sidebar-wrapper::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        /* Caterpillar Wavy Text - Xem Website */
+        .caterpillar-btn {
+            background: linear-gradient(135deg, #10b981, #22c55e, #86efac);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent !important;
+            font-weight: 900;
+            padding: 4px 0;
+            margin-top: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none !important;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            animation: caterpillar-crawl 3s infinite ease-in-out, caterpillar-gradient 4s infinite linear;
+            font-size: 1.15rem;
+            border: none !important;
+            box-shadow: none !important;
+            filter: drop-shadow(0px 2px 4px rgba(34, 197, 94, 0.35));
+        }
+        .caterpillar-btn .fa-solid {
+            color: #10b981 !important;
+            -webkit-text-fill-color: #10b981 !important;
+            display: inline-block;
+            transition: transform 0.3s ease;
+            animation: spin-slow 10s infinite linear;
+        }
+        .caterpillar-btn:hover {
+            transform: scale(1.12) translateY(-3px) !important;
+            filter: brightness(1.25) drop-shadow(0px 4px 12px rgba(16, 185, 129, 0.55));
+        }
+        .caterpillar-btn:hover .fa-solid {
+            animation: spin-continuous 1.2s infinite linear;
+        }
+        @keyframes spin-slow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes spin-continuous {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes caterpillar-crawl {
+            0%, 100% {
+                transform: translateY(0) scaleX(1) scaleY(1);
+            }
+            25% {
+                transform: translateY(-4px) scaleX(1.04) scaleY(0.96);
+            }
+            50% {
+                transform: translateY(2px) scaleX(0.96) scaleY(1.04);
+            }
+            75% {
+                transform: translateY(-2px) scaleX(1.02) scaleY(0.98);
+            }
+        }
+        @keyframes caterpillar-gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+        <!-- Top Navbar -->
+        <nav class="app-header navbar navbar-expand bg-body shadow-sm">
+            <div class="container-fluid">
+                <!-- Left Navbar Links -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" data-lte-toggle="sidebar" href="#" role="button">
+                            <i class="bi bi-list fs-4"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item d-none d-md-block ms-3 d-flex align-items-center">
+                        <a href="http://localhost/" class="caterpillar-btn" title="Truy cập trang chủ Website">
+                            <i class="fa-solid fa-earth-asia" style="transition: transform 0.6s ease;"></i> Xem Website
+                        </a>
+                    </li>
+                </ul>
+                <!-- Right Navbar Links -->
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item text-dark me-3 d-flex align-items-center">
+                        <img src="http://localhost/public/images/favicon.png?v=2" alt="Avatar" class="rounded-circle me-2" style="width: 26px; height: 26px; object-fit: contain;">
+                        <span>Xin chào, <strong>Admin</strong></span>
+                    </li>
+                    <li class="nav-item">
+                        <form action="http://localhost/admin/login/logout" method="POST" class="m-0">
+                            <input type="hidden" name="_token" value="9oSJLEy93N1Ijt0hJN92ALa9jsf3MoY8Vq9pl3hS" autocomplete="off"><input type="hidden" name="_csrf_token" value="9oSJLEy93N1Ijt0hJN92ALa9jsf3MoY8Vq9pl3hS">                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3 shadow-sm">
+                                <i class="fa-solid fa-right-from-bracket me-1"></i> Đăng xuất
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        
+        <!-- Sidebar -->
+        <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+            <!-- Sidebar Brand -->
+            <div class="sidebar-brand">
+                <a href="http://localhost/admin/dashboard" class="brand-link">
+                    <img src="http://localhost/public/images/favicon.png?v=2" alt="Logo" class="brand-image" style="max-height: 33px; object-fit: contain; filter: brightness(0) invert(1);">
+                    <span class="brand-text fw-semibold fs-5 text-white ms-2">TimNhaDat Admin</span>
+                </a>
+            </div>
+            
+            <!-- Sidebar Wrapper -->
+            <div class="sidebar-wrapper">
+                <nav class="mt-3">
+                    <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false">
+                                                
+                        <li class="nav-item">
+                            <a href="http://localhost/admin/dashboard" class="nav-link active">
+                                <i class="nav-icon fa-solid fa-gauge"></i>
+                                <p>Tổng Quan</p>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a href="http://localhost/admin/du-an" class="nav-link ">
+                                <i class="nav-icon fa-solid fa-building"></i>
+                                <p>
+                                    Dự án
+                                                                    </p>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a href="http://localhost/admin/danh-muc" class="nav-link ">
+                                <i class="nav-icon fa-solid fa-tags"></i>
+                                <p>Danh Mục</p>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a href="http://localhost/admin/tin-tuc" class="nav-link ">
+                                <i class="nav-icon fa-regular fa-newspaper"></i>
+                                <p>Tin Tức</p>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a href="http://localhost/admin/contact" class="nav-link ">
+                                <i class="nav-icon fa-solid fa-headset"></i>
+                                <p>Yêu cầu tư vấn (CRM)</p>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a href="http://localhost/admin/wallet" class="nav-link ">
+                                <i class="nav-icon fa-solid fa-wallet"></i>
+                                <p>Ví & Giao dịch CRM</p>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a href="http://localhost/admin/live-chat" class="nav-link ">
+                                <i class="nav-icon fa-regular fa-comments"></i>
+                                <p>
+                                    Live Chat
+                                    <span class="badge bg-danger rounded-pill float-end d-none" data-live-chat-waiting-badge>0</span>
+                                </p>
+                            </a>
+                        </li>
+
+                                                    <li class="nav-header text-uppercase text-xs font-weight-bold text-muted mt-3 mb-1">Hệ Thống</li>
+                            
+                            <li class="nav-item">
+                                <a href="http://localhost/admin/nguoi-dung" class="nav-link ">
+                                    <i class="nav-icon fa-solid fa-user-shield"></i>
+                                    <p>Người Dùng</p>
+                                </a>
+                            </li>
+                            
+                            <li class="nav-item">
+                                <a href="http://localhost/admin/bang-gia" class="nav-link ">
+                                    <i class="nav-icon fa-solid fa-money-bill-wave"></i>
+                                    <p>Bảng Giá</p>
+                                </a>
+                            </li>
+                            
+                            <li class="nav-item">
+                                <a href="http://localhost/admin/bao-cao" class="nav-link ">
+                                    <i class="nav-icon fa-solid fa-chart-pie"></i>
+                                    <p>Báo Cáo</p>
+                                </a>
+                            </li>
+                            
+                            <li class="nav-item">
+                                <a href="http://localhost/admin/cai-dat" class="nav-link ">
+                                    <i class="nav-icon fa-solid fa-gear"></i>
+                                    <p>Cài Đặt</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="http://localhost/admin/roles" class="nav-link ">
+                                    <i class="nav-icon fa-solid fa-user-shield"></i><p>Phân quyền & Vai trò</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="http://localhost/admin/system-log" class="nav-link ">
+                                    <i class="nav-icon fa-solid fa-clock-rotate-left"></i>
+                                    <p>Nhật Ký Hệ Thống</p>
+                                </a>
+                            </li>
+                                            </ul>
+                </nav>
+            </div>
+        </aside>
+        
+        <!-- Main Content Wrapper -->
+        <main class="app-main">
+            <!-- App Content Header -->
+            <div class="app-content-header py-3 bg-white border-bottom mb-3 shadow-xs">
+                <div class="container-fluid">
+                    <div class="row align-items-center">
+                        <div class="col-sm-6">
+                            <h3 class="mb-0 fw-semibold text-dark fs-4">Admin Dashboard - TimNhaDat.site</h3>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-end mb-0">
+                                <li class="breadcrumb-item"><a href="http://localhost/admin/dashboard" class="text-decoration-none">Admin</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Admin Dashboard - TimNhaDat.site</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- App Content -->
+            <div class="app-content">
+                <div class="container-fluid">
+
+<style>
+    /* Premium Dashboard Styles */
+    .dashboard-container {
+        padding: 0.5rem 0 2rem 0;
+    }
+    
+    /* Welcome Banner - Light Theme */
+    .welcome-banner {
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%) !important;
+        border: 1px solid rgba(59, 130, 246, 0.15) !important;
+        border-left: 5px solid #3b82f6 !important;
+        position: relative;
+        overflow: hidden;
+        border-radius: 16px;
+    }
+    
+    .welcome-banner::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0) 70%);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+    
+    .welcome-title {
+        color: #1e3a8a !important;
+        font-weight: 700;
+    }
+    
+    .welcome-text {
+        color: #4b5563 !important;
+        font-weight: 500;
+    }
+    
+    /* Stat Cards - Premium Dark Gradient Theme */
+    .stat-card {
+        border-radius: 16px !important;
+        border: none !important;
+        overflow: hidden;
+        position: relative;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12) !important;
+    }
+    
+    .stat-card-blue {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+    }
+    .stat-card-blue:hover {
+        box-shadow: 0 15px 30px rgba(37, 99, 235, 0.35) !important;
+    }
+    
+    .stat-card-green {
+        background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+    }
+    .stat-card-green:hover {
+        box-shadow: 0 15px 30px rgba(16, 185, 129, 0.35) !important;
+    }
+    
+    .stat-card-amber {
+        background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+    }
+    .stat-card-amber:hover {
+        box-shadow: 0 15px 30px rgba(217, 119, 6, 0.35) !important;
+    }
+    
+    .stat-card-purple {
+        background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%) !important;
+    }
+    .stat-card-purple:hover {
+        box-shadow: 0 15px 30px rgba(124, 58, 237, 0.35) !important;
+    }
+    
+    .stat-card-body {
+        padding: 1.75rem 1.5rem !important;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .stat-card-icon {
+        position: absolute;
+        right: 1.25rem;
+        top: 1.25rem;
+        font-size: 3rem;
+        opacity: 0.18;
+        transition: all 0.3s ease;
+        color: #ffffff;
+    }
+    
+    .stat-card:hover .stat-card-icon {
+        opacity: 0.3;
+        transform: scale(1.15) rotate(8deg);
+    }
+    
+    .stat-card-label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: rgba(255, 255, 255, 0.75);
+        margin-bottom: 0.6rem;
+    }
+    
+    .stat-card-value {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #ffffff;
+        line-height: 1;
+        margin-bottom: 1.25rem;
+        font-family: 'Source Sans 3', sans-serif;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .stat-card-footer {
+        margin-top: auto;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        padding: 0.85rem 1.5rem !important;
+        background: rgba(0, 0, 0, 0.1);
+    }
+    
+    .stat-card-link {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none !important;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .stat-card-link:hover {
+        color: #ffffff;
+    }
+    
+    .stat-card-link i {
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .stat-card-link:hover i {
+        transform: translateX(6px);
+    }
+    
+    /* Charts & Table Dashboard specific styles */
+    .dashboard-card {
+        background: #fff;
+        border-radius: 16px;
+        border: none;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        margin-bottom: 1.5rem;
+    }
+    .dashboard-card-header {
+        background: transparent;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        padding: 1.25rem 1.5rem;
+        font-weight: 700;
+        color: #1e293b;
+    }
+    .dashboard-card-body {
+        padding: 1.5rem;
+    }
+    .table-responsive {
+        border-radius: 0 0 16px 16px;
+    }
+    .table thead th {
+        background-color: #f8fafc;
+        border-bottom-width: 1px;
+        color: #64748b;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        padding: 1rem 1.5rem;
+    }
+    .table tbody td {
+        padding: 1rem 1.5rem;
+        vertical-align: middle;
+        color: #334155;
+        font-size: 0.875rem;
+    }
+    .action-btn {
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        transition: all 0.2s;
+    }
+    .action-btn-approve:hover { background: #dcfce7; color: #166534; }
+    .action-btn-reject:hover { background: #fee2e2; color: #991b1b; }
+</style>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="dashboard-container">
+    <!-- Welcome Banner -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="welcome-banner p-4 shadow-sm">
+                <div class="position-relative z-index-1">
+                    <h4 class="welcome-title mb-1">Chào mừng quay trở lại, Admin! 👋</h4>
+                    <p class="welcome-text mb-0">Hôm nay là 12/07/2026. Hệ thống đang hoạt động ổn định và sẵn sàng hỗ trợ bạn quản lý.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="row g-4">
+        <!-- Total Projects Card -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="stat-card stat-card-blue">
+                <div class="stat-card-body">
+                    <i class="fa-solid fa-building stat-card-icon"></i>
+                    <div class="stat-card-label">Tổng Số Dự Án</div>
+                    <div class="stat-card-value">2,080</div>
+                </div>
+                <div class="stat-card-footer">
+                    <a href="http://localhost/admin/du-an" class="stat-card-link">
+                        <span>Xem Chi Tiết</span>
+                        <i class="fa-solid fa-arrow-right-long"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- New Leads Card -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="stat-card stat-card-green">
+                <div class="stat-card-body">
+                    <i class="fa-solid fa-users stat-card-icon"></i>
+                    <div class="stat-card-label">Khách Hàng Mới</div>
+                    <div class="stat-card-value">6</div>
+                </div>
+                <div class="stat-card-footer">
+                    <a href="http://localhost/admin/khach-hang" class="stat-card-link">
+                        <span>Xem Chi Tiết</span>
+                        <i class="fa-solid fa-arrow-right-long"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Posts Card -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="stat-card stat-card-amber">
+                <div class="stat-card-body">
+                    <i class="fa-solid fa-square-check stat-card-icon"></i>
+                    <div class="stat-card-label">Tin Đang Hoạt Động</div>
+                    <div class="stat-card-value">1,849</div>
+                </div>
+                <div class="stat-card-footer">
+                    <a href="http://localhost/admin/du-an" class="stat-card-link">
+                        <span>Xem Chi Tiết</span>
+                        <i class="fa-solid fa-arrow-right-long"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Users Card -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="stat-card stat-card-purple">
+                <div class="stat-card-body">
+                    <i class="fa-solid fa-user-shield stat-card-icon"></i>
+                    <div class="stat-card-label">Tổng Số Người Dùng</div>
+                    <div class="stat-card-value">100</div>
+                </div>
+                <div class="stat-card-footer">
+                    <a href="http://localhost/admin/nguoi-dung" class="stat-card-link">
+                        <span>Xem Chi Tiết</span>
+                        <i class="fa-solid fa-arrow-right-long"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Grid -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-8">
+            <div class="dashboard-card h-100 mb-0">
+                <div class="dashboard-card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fs-6"><i class="fa-solid fa-chart-line text-primary me-2"></i>Tin đăng & Dự án mới (6 Tháng qua)</h5>
+                </div>
+                <div class="dashboard-card-body">
+                    <canvas id="mainChart" style="min-height: 300px; width: 100%;"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="dashboard-card h-100 mb-0">
+                <div class="dashboard-card-header">
+                    <h5 class="mb-0 fs-6"><i class="fa-solid fa-chart-pie text-success me-2"></i>Tỷ lệ Danh mục</h5>
+                </div>
+                <div class="dashboard-card-body d-flex justify-content-center align-items-center">
+                    <canvas id="pieChart" style="max-height: 280px; width: 100%;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         ADMIN ADVANCED ANALYTICS SECTION
+         ========================================== -->
+    <div class="row g-4 mb-4">
+        <!-- Biểu đồ doanh thu -->
+        <div class="col-lg-6">
+            <div class="dashboard-card h-100 mb-0">
+                <div class="dashboard-card-header">
+                    <h5 class="mb-0 fs-6"><i class="fa-solid fa-money-bill-trend-up text-success me-2"></i>Thống kê doanh thu nạp tiền (5 tháng qua)</h5>
+                </div>
+                <div class="dashboard-card-body">
+                    <canvas id="revenueChart" style="min-height: 250px; width: 100%;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Biểu đồ View, Chat, Call toàn trang -->
+        <div class="col-lg-6">
+            <div class="dashboard-card h-100 mb-0">
+                <div class="dashboard-card-header">
+                    <h5 class="mb-0 fs-6"><i class="fa-solid fa-chart-line text-info me-2"></i>Lượt tương tác toàn hệ thống</h5>
+                </div>
+                <div class="dashboard-card-body">
+                    <canvas id="interactionsChart" style="min-height: 250px; width: 100%;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hàng Top Rankings -->
+    <div class="row g-4 mb-4">
+        <!-- Top bài đăng xem nhiều nhất -->
+        <div class="col-md-6 col-lg-3">
+            <div class="dashboard-card h-100 mb-0">
+                <div class="dashboard-card-header"><h5 class="mb-0 fs-6 small fw-bold">Top Tin Xem Nhiều Nhất</h5></div>
+                <div class="dashboard-card-body p-2">
+                    <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item px-1 py-2 small d-flex justify-content-between align-items-center">
+                                <span class="text-truncate me-2" style="max-width: 150px;">Chính chủ bán Shophouse bán 32m² - Hương Trà - 810 triệu</span>
+                                <span class="badge bg-primary rounded-pill">9,983 view</span>
+                            </li>
+                                                    <li class="list-group-item px-1 py-2 small d-flex justify-content-between align-items-center">
+                                <span class="text-truncate me-2" style="max-width: 150px;">Liền kề bán 133m² mặt tiền Phố Lý Thường Kiệt, TP. Phủ Lý, Hà Nam</span>
+                                <span class="badge bg-primary rounded-pill">9,967 view</span>
+                            </li>
+                                                    <li class="list-group-item px-1 py-2 small d-flex justify-content-between align-items-center">
+                                <span class="text-truncate me-2" style="max-width: 150px;">Chính chủ bán Officetel bán 43m² - Long Điền - 1 tỷ 636 triệu</span>
+                                <span class="badge bg-primary rounded-pill">9,958 view</span>
+                            </li>
+                                                    <li class="list-group-item px-1 py-2 small d-flex justify-content-between align-items-center">
+                                <span class="text-truncate me-2" style="max-width: 150px;">Bán Condotel bán Bình Xuyên - Vĩnh Phúc | 102m² | 48 tỷ 525 triệu</span>
+                                <span class="badge bg-primary rounded-pill">9,953 view</span>
+                            </li>
+                                                    <li class="list-group-item px-1 py-2 small d-flex justify-content-between align-items-center">
+                                <span class="text-truncate me-2" style="max-width: 150px;">Cần bán gấp Officetel bán 569m² tại Hồng Bàng, Hải Phòng</span>
+                                <span class="badge bg-primary rounded-pill">9,952 view</span>
+                            </li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top người đăng tin nhiều nhất -->
+        <div class="col-md-6 col-lg-3">
+            <div class="dashboard-card h-100 mb-0">
+                <div class="dashboard-card-header"><h5 class="mb-0 fs-6 small fw-bold">Top Người Đăng Tin</h5></div>
+                <div class="dashboard-card-body p-2">
+                    <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item px-1 py-2 small d-flex justify-content-between align-items-center">
+                                <span class="text-truncate me-2" style="max-width: 150px;">test14</span>
+                                <span class="badge bg-success rounded-pill">78 tin</span>
+                            </li>
+                                                    <li class="list-group-item px-1 py-2 small d-flex justify-content-between align-items-center">
+                                <span class="text-truncate me-2" style="max-width: 150px;">test16</span>
+                                <span class="badge bg-success rounded-pill">77 tin</span>
+                            </li>
+                                                    <li class="list-group-item px-1 py-2 small d-flex justify-content-between align-items-center">
+                                <span class="text-truncate me-2" style="max-width: 150px;">test4</span>
+                                <span class="badge bg-success rounded-pill">74 tin</span>
+                            </li>
+                                                    <li class="list-group-item px-1 py-2 small d-flex justify-content-between align-items-center">
+                                <span class="text-truncate me-2" style="max-width: 150px;">test18</span>
+                                <span class="badge bg-success rounded-pill">73 tin</span>
+                            </li>
+                                                    <li class="list-group-item px-1 py-2 small d-flex justify-content-between align-items-center">
+                                <span class="text-truncate me-2" style="max-width: 150px;">test2</span>
+                                <span class="badge bg-success rounded-pill">68 tin</span>
+                            </li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top khu vực -->
+        <div class="col-md-6 col-lg-3">
+            <div class="dashboard-card h-100 mb-0">
+                <div class="dashboard-card-header"><h5 class="mb-0 fs-6 small fw-bold">Top Tỉnh Thành</h5></div>
+                <div class="dashboard-card-body p-2">
+                    <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item px-1 py-2 small d-flex justify-content-between align-items-center">
+                                <span>Hồ Chí Minh</span>
+                                <span class="badge bg-info rounded-pill">981 tin</span>
+                            </li>
+                                                    <li class="list-group-item px-1 py-2 small d-flex justify-content-between align-items-center">
+                                <span>Quảng Nam</span>
+                                <span class="badge bg-info rounded-pill">62 tin</span>
+                            </li>
+                                                    <li class="list-group-item px-1 py-2 small d-flex justify-content-between align-items-center">
+                                <span>Bà Rịa - Vũng Tàu</span>
+                                <span class="badge bg-info rounded-pill">61 tin</span>
+                            </li>
+                                                    <li class="list-group-item px-1 py-2 small d-flex justify-content-between align-items-center">
+                                <span>Cần Thơ</span>
+                                <span class="badge bg-info rounded-pill">59 tin</span>
+                            </li>
+                                                    <li class="list-group-item px-1 py-2 small d-flex justify-content-between align-items-center">
+                                <span>Khánh Hòa</span>
+                                <span class="badge bg-info rounded-pill">55 tin</span>
+                            </li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top loại BDS -->
+        <div class="col-md-6 col-lg-3">
+            <div class="dashboard-card h-100 mb-0">
+                <div class="dashboard-card-header"><h5 class="mb-0 fs-6 small fw-bold">Top Loại Bất Động Sản</h5></div>
+                <div class="dashboard-card-body p-2">
+                    <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item px-1 py-2 small d-flex justify-content-between align-items-center">
+                                <span class="text-truncate me-2" style="max-width: 150px;">Nhà đất bán</span>
+                                <span class="badge bg-secondary rounded-pill">578 tin</span>
+                            </li>
+                                                    <li class="list-group-item px-1 py-2 small d-flex justify-content-between align-items-center">
+                                <span class="text-truncate me-2" style="max-width: 150px;">Nhà đất cho thuê</span>
+                                <span class="badge bg-secondary rounded-pill">483 tin</span>
+                            </li>
+                                                    <li class="list-group-item px-1 py-2 small d-flex justify-content-between align-items-center">
+                                <span class="text-truncate me-2" style="max-width: 150px;">Biệt thự bán</span>
+                                <span class="badge bg-secondary rounded-pill">110 tin</span>
+                            </li>
+                                                    <li class="list-group-item px-1 py-2 small d-flex justify-content-between align-items-center">
+                                <span class="text-truncate me-2" style="max-width: 150px;">Đất nền bán</span>
+                                <span class="badge bg-secondary rounded-pill">102 tin</span>
+                            </li>
+                                                    <li class="list-group-item px-1 py-2 small d-flex justify-content-between align-items-center">
+                                <span class="text-truncate me-2" style="max-width: 150px;">Nhà riêng bán</span>
+                                <span class="badge bg-secondary rounded-pill">102 tin</span>
+                            </li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Pending Posts Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="dashboard-card">
+                <div class="dashboard-card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fs-6"><i class="fa-solid fa-clock-rotate-left text-warning me-2"></i>Tin đăng chờ duyệt mới nhất</h5>
+                    <a href="http://localhost/admin/du-an" class="btn btn-sm btn-outline-primary rounded-pill px-3">Xem tất cả</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tiêu đề</th>
+                                <th>Chuyên mục</th>
+                                <th>Người đăng</th>
+                                <th>Ngày tạo</th>
+                                <th class="text-end">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                                            <tr>
+                                    <td colspan="6" class="text-center text-muted py-4">Không có tin đăng nào chờ duyệt</td>
+                                </tr>
+                                                    </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div> <!-- container-fluid -->
+            </div> <!-- app-content -->
+        </main> <!-- app-main -->
+        
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="float-end d-none d-sm-inline">System Version 4.0</div>
+            <strong>Copyright &copy; 2026 <a href="http://localhost" class="text-decoration-none">TimNhaDat.site</a>.</strong> All rights reserved.
+        </footer>
+    </div> <!-- app-wrapper -->
+    
+    <!-- Required Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="http://localhost/public/js/adminlte.min.js"></script>
+    <script src="http://localhost/public/js/admin-dialog.js?v=1"></script>
+    <script>
+      const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
+      const Default = {
+        scrollbarTheme: 'os-theme-light',
+        scrollbarAutoHide: 'leave',
+        scrollbarClickScroll: true,
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+        const isMobile = window.innerWidth <= 992;
+        if (sidebarWrapper && OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined && !isMobile) {
+          OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+            scrollbars: {
+              theme: Default.scrollbarTheme,
+              autoHide: Default.scrollbarAutoHide,
+              clickScroll: Default.scrollbarClickScroll,
+            },
+          });
+        }
+
+        const liveChatBadge = document.querySelector('[data-live-chat-waiting-badge]');
+        function updateLiveChatBadge() {
+          if (!liveChatBadge) return;
+          fetch('http://localhost/admin/live-chat/stats', { headers: { 'Accept': 'application/json' } })
+            .then(response => response.json())
+            .then(data => {
+              if (!data.success || !data.stats) return;
+              const waiting = Number(data.stats.waiting_for_admin || 0);
+              liveChatBadge.textContent = waiting;
+              liveChatBadge.classList.toggle('d-none', waiting <= 0);
+            })
+            .catch(() => {});
+        }
+        updateLiveChatBadge();
+        setInterval(updateLiveChatBadge, 5000);
+      });
+    </script>
+</body>
+</html>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Inject PHP data into JS securely
+    const rawCategories = [{"ten":"Nh\u00e0 \u0111\u1ea5t cho thu\u00ea","cnt":631},{"ten":"Nh\u00e0 \u0111\u1ea5t b\u00e1n","cnt":593},{"ten":"Thuong mai","cnt":856},{"ten":"Tin tuc bat dong san","cnt":0},{"ten":"Cap nhat thi truong","cnt":0}];
+    const rawMonths = [{"period":"02\/2026","cnt":24},{"period":"03\/2026","cnt":47},{"period":"04\/2026","cnt":50},{"period":"05\/2026","cnt":1018},{"period":"07\/2026","cnt":1}];
+
+    const pieLabels = rawCategories.map(item => item.danh_muc);
+    const pieData = rawCategories.map(item => item.so_luong);
+
+    const lineLabels = rawMonths.map(item => item.thang);
+    const lineTinDang = rawMonths.map(item => item.tin_dang_moi);
+    const lineDuAn = rawMonths.map(item => item.du_an_moi);
+
+    // Default colors if categories exceed standard 4
+    const bgColors = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#ec4899', '#06b6d4'];
+
+    // Check if chart contexts exist
+    const mainChartElem = document.getElementById('mainChart');
+    const pieChartElem = document.getElementById('pieChart');
+    
+    if (mainChartElem && pieChartElem) {
+        // Gradient definitions for Line Chart
+        const ctxMain = mainChartElem.getContext('2d');
+        const gradientBlue = ctxMain.createLinearGradient(0, 0, 0, 400);
+        gradientBlue.addColorStop(0, 'rgba(37, 99, 235, 0.2)');
+        gradientBlue.addColorStop(1, 'rgba(37, 99, 235, 0)');
+
+        const gradientGreen = ctxMain.createLinearGradient(0, 0, 0, 400);
+        gradientGreen.addColorStop(0, 'rgba(16, 185, 129, 0.2)');
+        gradientGreen.addColorStop(1, 'rgba(16, 185, 129, 0)');
+
+        // Initialize Line Chart
+        new Chart(ctxMain, {
+            type: 'line',
+            data: {
+                labels: lineLabels,
+                datasets: [
+                    {
+                        label: 'Tin Đăng Mới',
+                        data: lineTinDang,
+                        borderColor: '#2563eb',
+                        backgroundColor: gradientBlue,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#2563eb',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Dự Án Mới',
+                        data: lineDuAn,
+                        borderColor: '#059669',
+                        backgroundColor: gradientGreen,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#059669',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top', align: 'end', labels: { usePointStyle: true, boxWidth: 8, font: { family: 'inherit' } } },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        titleFont: { size: 13 },
+                        bodyFont: { size: 13 },
+                        padding: 10,
+                        cornerRadius: 8
+                    }
+                },
+                scales: {
+                    y: { beginAtZero: true, grid: { borderDash: [4, 4] } },
+                    x: { grid: { display: false } }
+                },
+                interaction: { mode: 'index', intersect: false }
+            }
+        });
+
+        // Initialize Doughnut Chart
+        const ctxPie = pieChartElem.getContext('2d');
+        new Chart(ctxPie, {
+            type: 'doughnut',
+            data: {
+                labels: pieLabels,
+                datasets: [{
+                    data: pieData,
+                    backgroundColor: bgColors.slice(0, pieLabels.length),
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '75%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20, font: { family: 'inherit' } } },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        titleFont: { size: 13 },
+                        bodyFont: { size: 13 },
+                        padding: 10,
+                        cornerRadius: 8
+                    }
+                }
+            }
+        });
+
+        // 3. Doanh thu nạp tiền chart
+        const rawRevenue = [{"period":"02\/2026","total_revenue":"2000000"},{"period":"03\/2026","total_revenue":"500000"},{"period":"04\/2026","total_revenue":"3000000"},{"period":"05\/2026","total_revenue":"1670000"},{"period":"06\/2026","total_revenue":"2050000"},{"period":"07\/2026","total_revenue":"50000"}];
+        const revLabels = rawRevenue.map(item => item.period);
+        const revData = rawRevenue.map(item => item.total_revenue);
+
+        const revChartElem = document.getElementById('revenueChart');
+        if (revChartElem) {
+            new Chart(revChartElem, {
+                type: 'bar',
+                data: {
+                    labels: revLabels,
+                    datasets: [{
+                        label: 'Doanh thu (VNĐ)',
+                        data: revData,
+                        backgroundColor: '#10b981',
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, grid: { borderDash: [4, 4] } }
+                    }
+                }
+            });
+        }
+
+        // 4. Lượt tương tác chart
+        const rawInteractions = [{"period":"07\/2026","total_views":"7","total_chats":"0","total_calls":"0"}];
+        const intLabels = rawInteractions.map(item => item.period);
+        const intViews = rawInteractions.map(item => item.total_views);
+        const intChats = rawInteractions.map(item => item.total_chats);
+        const intCalls = rawInteractions.map(item => item.total_calls);
+
+        const intChartElem = document.getElementById('interactionsChart');
+        if (intChartElem) {
+            new Chart(intChartElem, {
+                type: 'line',
+                data: {
+                    labels: intLabels,
+                    datasets: [
+                        {
+                            label: 'Lượt xem',
+                            data: intViews,
+                            borderColor: '#3b82f6',
+                            borderWidth: 2.5,
+                            fill: false,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Lượt Chat',
+                            data: intChats,
+                            borderColor: '#06b6d4',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Cuộc gọi',
+                            data: intCalls,
+                            borderColor: '#ef4444',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, grid: { borderDash: [4, 4] } }
+                    }
+                }
+            });
+        }
+    }
+});
+
+// AJAX Handle Approve / Reject
+window.handleAction = async function(id, action) {
+    const accepted = await AdminDialog.confirm(
+        'Bạn có chắc chắn muốn ' + (action === 'approve' ? 'Duyệt' : 'Từ chối') + ' tin đăng này không?',
+        { title: action === 'approve' ? 'Duyệt tin đăng?' : 'Từ chối tin đăng?', type: action === 'approve' ? 'success' : 'warning', confirmText: action === 'approve' ? 'Duyệt tin' : 'Từ chối' }
+    );
+    if (!accepted) return;
+
+    fetch('http://localhost/admin/du-an/' + action + '/' + id, {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            const row = document.getElementById('row-' + id);
+            if (row) {
+                row.style.opacity = '0';
+                row.style.transform = 'translateX(20px)';
+                setTimeout(() => row.remove(), 500);
+            }
+        } else {
+            alert(data.message || 'Có lỗi xảy ra');
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert('Lỗi kết nối tới máy chủ!');
+    });
+}
+</script>

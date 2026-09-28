@@ -1,0 +1,23 @@
+RewriteEngine On
+Options -Indexes
+
+# Block source code, configuration and runtime data from HTTP access.
+RewriteRule ^(?:app|bootstrap|config|core|database|legacy|logs|resources|routes|storage|tests|vendor)(?:/|$) - [F,L,NC]
+RewriteRule ^(?:composer\.(?:json|lock)|artisan|phpunit\.xml|.*\.(?:log|sql|md))$ - [F,L,NC]
+
+<FilesMatch "^(?:\.env(?:\..*)?|composer\.(?:json|lock)|.*\.(?:log|sql|md))$">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Assets and uploads are mirrored in the current public directory.
+RewriteRule ^public/ - [L]
+
+# Dispatch every application URL through the legacy-compatible entry point.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]

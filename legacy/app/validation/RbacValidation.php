@@ -1,0 +1,2 @@
+<?php
+class RbacValidation{public static function role(array$in):array{$name=trim((string)($in['name']??''));$errors=[];if($name===''||mb_strlen($name)>50)$errors[]='Tên vai trò phải từ 1 đến 50 ký tự.';$slug=strtolower(trim(preg_replace('/[^a-z0-9]+/i','-',iconv('UTF-8','ASCII//TRANSLIT',$name)?:$name),'-'));return['data'=>['name'=>$name,'description'=>trim((string)($in['description']??'')),'slug'=>$slug],'errors'=>$errors];}}
