@@ -1,7 +1,7 @@
 <?php
 $layout = $data['layout'] ?? [];
 $siteSettings = $layout['settings'] ?? [];
-$siteName = (string)($siteSettings['site_name'] ?? SITE_NAME);
+$siteName = SITE_NAME;
 ?>
 <!DOCTYPE html>
 <html lang="en">

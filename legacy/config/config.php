@@ -52,7 +52,17 @@ load_env_file(APP_ROOT . '/.env');
 date_default_timezone_set((string)env('APP_TIMEZONE', 'Asia/Ho_Chi_Minh'));
 
 define('URL_ROOT', rtrim((string)env('URL_ROOT', 'http://localhost/CITC_BDS'), '/'));
-define('SITE_NAME', (string)env('SITE_NAME', 'TimNhaDat.site'));
+// Tên website = tên miền đang truy cập (bỏ "www." và cổng), trừ khi đặt SITE_NAME trong .env.
+function current_site_name(string $default = 'TimNhaDat.site'): string {
+    $host = strtolower((string)($_SERVER['HTTP_HOST'] ?? ''));
+    $host = preg_replace('/:\d+$/', '', $host);
+    $host = preg_replace('/^www\./', '', $host);
+    if ($host === '' || !preg_match('/^[a-z0-9.-]+$/', $host) || in_array($host, ['localhost', '127.0.0.1', '::1'], true)) {
+        return $default;
+    }
+    return $host;
+}
+define('SITE_NAME', (string)env('SITE_NAME', current_site_name()));
 
 // Database Configuration
 define('DB_HOST', (string)env('DB_HOST', 'localhost'));

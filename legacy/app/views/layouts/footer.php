@@ -8,7 +8,7 @@ $siteSettings = $layout['settings'] ?? [];
             <div class="col-lg-4 col-md-6">
                 <a href="<?= URL_ROOT ?>/" class="fw-bold mb-4 text-white d-flex align-items-center text-decoration-none">
                     <img src="<?= URL_ROOT ?>/public/images/favicon.png?v=2" alt="Logo" width="45" height="45" class="me-2" style="object-fit: contain; filter: brightness(0) invert(1);">
-                    <?= htmlspecialchars((string)($siteSettings['site_name'] ?? SITE_NAME)) ?>
+                    <?= htmlspecialchars(SITE_NAME) ?>
                 </a>
                 <p class="text-white-50">Nền tảng hàng đầu để tìm kiếm ngôi nhà mơ ước và các cơ hội đầu tư bất động sản tốt nhất với quy trình minh bạch và sự hỗ trợ chuyên nghiệp.</p>
             </div>
@@ -39,7 +39,7 @@ $siteSettings = $layout['settings'] ?? [];
         </div>
         <hr class="mt-4 mb-3 border-secondary">
         <div class="text-center text-white-50 small">
-            &copy; <?= date('Y') ?> <?= htmlspecialchars((string)($siteSettings['site_name'] ?? SITE_NAME)) ?>. Đã đăng ký bản quyền.
+            &copy; <?= date('Y') ?> <?= htmlspecialchars(SITE_NAME) ?>. Đã đăng ký bản quyền.
         </div>
     </div>
 </footer>
