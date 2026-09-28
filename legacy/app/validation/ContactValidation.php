@@ -52,7 +52,7 @@ class ContactValidation
         }
 
         // 6. Xác thực Google reCAPTCHA nếu có cấu hình trong file .env
-        $recaptchaSecret = getenv('RECAPTCHA_SECRET_KEY');
+        $recaptchaSecret = env('RECAPTCHA_SECRET_KEY');
         if (!empty($recaptchaSecret)) {
             $captchaResponse = $_POST['g-recaptcha-response'] ?? '';
             if (empty($captchaResponse)) {

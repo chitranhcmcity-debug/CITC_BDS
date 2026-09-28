@@ -61,8 +61,8 @@ class CRMService
      */
     public function sendToTelegram(array $contact): bool
     {
-        $token = getenv('TELEGRAM_BOT_TOKEN');
-        $chatId = getenv('TELEGRAM_CHAT_ID');
+        $token = env('TELEGRAM_BOT_TOKEN');
+        $chatId = env('TELEGRAM_CHAT_ID');
 
         if (empty($token) || empty($chatId)) {
             return false;
@@ -192,7 +192,7 @@ class CRMService
      */
     private function askGemini(string $prompt): ?string
     {
-        $apiKey = getenv('GEMINI_API_KEY');
+        $apiKey = env('GEMINI_API_KEY');
         if (empty($apiKey)) {
             return null;
         }

@@ -36,7 +36,15 @@ function load_env_file(string $path): void {
 
 function env(string $key, mixed $default = null): mixed {
     $value = getenv($key);
-    return $value === false ? $default : $value;
+    if ($value === false) {
+        return $default;
+    }
+    // Railway/dashboard values may carry a trailing newline or wrapping quotes.
+    $value = trim($value);
+    if (strlen($value) >= 2 && ($value[0] === '"' || $value[0] === "'") && str_ends_with($value, $value[0])) {
+        $value = trim(substr($value, 1, -1));
+    }
+    return $value;
 }
 
 load_env_file(APP_ROOT . '/.env');

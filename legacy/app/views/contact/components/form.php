@@ -2,7 +2,7 @@
 /**
  * Component Form gửi yêu cầu tư vấn / liên hệ.
  */
-$recaptchaSiteKey = getenv('RECAPTCHA_SITE_KEY');
+$recaptchaSiteKey = env('RECAPTCHA_SITE_KEY');
 ?>
 <div class="card border-0 shadow-sm" style="border-radius: 12px;">
     <div class="card-body p-4">

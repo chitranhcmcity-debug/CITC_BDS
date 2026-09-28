@@ -39,7 +39,7 @@
 </section>
 
 <!-- reCAPTCHA API Script if key is set -->
-<?php if (!empty(getenv('RECAPTCHA_SITE_KEY'))): ?>
+<?php if (!empty(env('RECAPTCHA_SITE_KEY'))): ?>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <?php endif; ?>
 

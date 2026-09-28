@@ -2,7 +2,7 @@
 /**
  * Component hiển thị Google Maps / OpenStreetMap địa chỉ văn phòng.
  */
-$googleMapsKey = getenv('GOOGLE_MAPS_API_KEY');
+$googleMapsKey = env('GOOGLE_MAPS_API_KEY');
 ?>
 <div class="card border-0 shadow-sm" style="border-radius: 12px; overflow: hidden;">
     <div class="card-body p-0">

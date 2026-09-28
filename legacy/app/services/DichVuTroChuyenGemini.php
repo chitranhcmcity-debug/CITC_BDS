@@ -26,7 +26,7 @@ class GeminiChatService
         if (str_contains(URL_ROOT, 'localhost')) curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         $body = curl_exec($ch); $status = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE); $error = curl_error($ch); curl_close($ch);
         if ($status < 200 || $status >= 300 || !is_string($body)) {
-            error_log('[GEMINI PROXY] HTTP '.$status.' '.$error);
+            error_log('[GEMINI PROXY] HTTP '.$status.' '.$error.' '.mb_substr((string) $body, 0, 500));
             return 'Trợ lý đang bận trong giây lát. Bạn vui lòng thử lại hoặc chọn “Liên hệ tư vấn” nhé.';
         }
         $data = json_decode($body, true);
