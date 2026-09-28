@@ -188,8 +188,8 @@ class ProfileService
     {
         $db = new Database();
         $db->query("
-            INSERT INTO thong_bao (ma_nguoi_dung, tieu_de, noi_dung, da_doc, ngay_tao)
-            VALUES (:uid, :title, :content, 0, NOW())
+            INSERT INTO thong_bao_nguoi_dung (user_id, type, title, content, is_read, created_at)
+            VALUES (:uid, 'he_thong', :title, :content, 0, NOW())
         ");
         $db->bind(':uid', $userId, PDO::PARAM_INT);
         $db->bind(':title', $title);

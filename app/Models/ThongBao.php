@@ -7,25 +7,24 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ThongBao extends Model
 {
-    protected $table = 'thong_bao';
-
-    const CREATED_AT = 'ngay_tao';
-
-    const UPDATED_AT = null;
+    protected $table = 'thong_bao_nguoi_dung';
 
     protected $fillable = [
-        'ma_nguoi_dung',
-        'tieu_de',
-        'noi_dung',
-        'da_doc',
+        'user_id',
+        'type',
+        'title',
+        'content',
+        'url',
+        'icon',
+        'is_read',
     ];
 
     protected $casts = [
-        'da_doc' => 'boolean',
+        'is_read' => 'boolean',
     ];
 
     public function nguoiDung(): BelongsTo
     {
-        return $this->belongsTo(NguoiDung::class, 'ma_nguoi_dung');
+        return $this->belongsTo(NguoiDung::class, 'user_id');
     }
 }

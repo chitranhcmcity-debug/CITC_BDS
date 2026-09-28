@@ -85,16 +85,6 @@ class DuAn extends Model
         return $this->hasMany(HinhAnhDuAn::class, 'ma_du_an');
     }
 
-    public function videoDuAn(): HasMany
-    {
-        return $this->hasMany(VideoDuAn::class, 'ma_du_an');
-    }
-
-    public function lichHen(): HasMany
-    {
-        return $this->hasMany(LichHen::class, 'ma_du_an');
-    }
-
     public function yeuThich(): BelongsToMany
     {
         return $this->belongsToMany(NguoiDung::class, 'yeu_thich', 'ma_du_an', 'ma_nguoi_dung')

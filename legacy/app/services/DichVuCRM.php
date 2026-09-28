@@ -27,7 +27,7 @@ class CRMService
     }
 
     /**
-     * Tạo thông báo thong_bao cho tất cả tài khoản Admin (ma_vai_tro = 1).
+     * Tạo thông báo cho tất cả tài khoản Admin (ma_vai_tro = 1).
      */
     public function notifyAdmins(array $contact): void
     {

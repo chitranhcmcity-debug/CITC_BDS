@@ -92,7 +92,7 @@ class NguoiDung extends Authenticatable
 
     public function thongBao(): HasMany
     {
-        return $this->hasMany(ThongBao::class, 'ma_nguoi_dung');
+        return $this->hasMany(ThongBao::class, 'user_id');
     }
 
     public function giaoDich(): HasMany

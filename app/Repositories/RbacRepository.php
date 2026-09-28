@@ -109,13 +109,8 @@ class RbacRepository
         $this->db->bind(':u', $user, PDO::PARAM_INT);
         if (! $this->db->execute() || $this->db->rowCount() < 1) {
             return false;
-        }$this->db->query('DELETE FROM vai_tro_nguoi_dung WHERE user_id=:u');
-        $this->db->bind(':u', $user, PDO::PARAM_INT);
-        $this->db->execute();
-        $this->db->query('INSERT INTO vai_tro_nguoi_dung(user_id,role_id) VALUES(:u,:r)');
-        $this->db->bind(':u', $user, PDO::PARAM_INT);
-        $this->db->bind(':r', $role, PDO::PARAM_INT);
+        }
 
-        return $this->db->execute();
+        return true;
     }
 }

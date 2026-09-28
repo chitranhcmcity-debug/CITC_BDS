@@ -70,9 +70,9 @@ class DashboardRepository
 
     public function notifications(int $userId, int $limit = 10): array
     {
-        $this->db->query("SELECT id, tieu_de, noi_dung, da_doc, ngay_tao
-                          FROM thong_bao WHERE ma_nguoi_dung=:uid
-                          ORDER BY ngay_tao DESC LIMIT :lim");
+        $this->db->query("SELECT id, title AS tieu_de, content AS noi_dung, is_read AS da_doc, created_at AS ngay_tao
+                          FROM thong_bao_nguoi_dung WHERE user_id=:uid
+                          ORDER BY created_at DESC LIMIT :lim");
         $this->db->bind(':uid', $userId, PDO::PARAM_INT);
         $this->db->bind(':lim', max(1, min($limit, 20)), PDO::PARAM_INT);
         return $this->db->resultSet() ?: [];
