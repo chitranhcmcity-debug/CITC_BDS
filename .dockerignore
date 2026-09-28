@@ -1,0 +1,13 @@
+.git
+.codegraph
+.env
+legacy/.env
+node_modules
+vendor
+citcbds.sql
+legacy/storage/backups
+storage/framework/*.txt
+test-exports
+test-exports-standard
+test_syntax.php
+docs
